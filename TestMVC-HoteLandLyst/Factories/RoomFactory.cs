@@ -8,7 +8,7 @@ using TestMVC_HoteLandLyst.Models;
 
 namespace TestMVC_HoteLandLyst.Factories
 {
-    public class RoomFactory
+    public class RoomFactory : IFactory<Room>
     {
         private static RoomFactory instance;
         public static RoomFactory Instance
@@ -31,19 +31,6 @@ namespace TestMVC_HoteLandLyst.Factories
             set { rooms = value; }
         }
 
-        public List<Room> CreateRooms()
-        {
-            ClearRooms();
-            DataTable dataTable = MsSqlManager.Instance.GetAllRooms();
-            foreach (DataRow row in dataTable.Rows)
-            {                
-                Rooms.Add(new Room(Convert.ToInt32(row[0]), (decimal)row[1], ConvertToRoomStatus(row[2].ToString())));
-            }
-
-            CreateRoomAccessories(rooms);
-            return Rooms;
-        }
-
         private void ClearRooms()
         {
             if (Rooms.Count > 0)
@@ -52,7 +39,8 @@ namespace TestMVC_HoteLandLyst.Factories
             }
         }
 
-        public void CreateRoomAccessories(List<Room> rooms)
+        //Should probably be in it's own constructor
+        private void CreateRoomAccessories(List<Room> rooms)
         {
             DataTable dt = MsSqlManager.Instance.GetRoomAccessories();
 
@@ -68,6 +56,18 @@ namespace TestMVC_HoteLandLyst.Factories
             }
         }
 
+        public IList<Room> CreateAll()
+        {
+            ClearRooms();
+            DataTable dataTable = MsSqlManager.Instance.GetAllRooms();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Rooms.Add(new Room(Convert.ToInt32(row[0]), (decimal)row[1], ConvertToRoomStatus(row[2].ToString())));
+            }
+
+            CreateRoomAccessories(rooms);
+            return Rooms;
+        }
         private RoomStatus ConvertToRoomStatus(string statusString)
         {
             foreach (string name in Enum.GetNames(typeof(RoomStatus)))

@@ -13,7 +13,7 @@ namespace TestMVC_HoteLandLyst.Controllers
     {
         public IActionResult Index()
         {
-            List<Room> rooms = RoomFactory.Instance.CreateRooms();
+            List<Room> rooms = (List<Room>)RoomFactory.Instance.CreateAll();
 
             return View(rooms);
         }

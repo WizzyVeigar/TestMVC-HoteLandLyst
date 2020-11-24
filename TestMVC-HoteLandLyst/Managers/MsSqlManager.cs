@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.Models;
 
 namespace TestMVC_HoteLandLyst.ApiController
-{   
+{
+    [Route("api/[controller]")]
+    [ApiController]
     public class MsSqlManager
     {
 
@@ -39,8 +41,9 @@ namespace TestMVC_HoteLandLyst.ApiController
             conn = new SqlConnection(connectionstring);
         }
 
+
+
         //Rewrite method to return a dataset, make it a customer in logic
-    
         public Customer GetCustomer(string phoneNumber)
         {
             //Make in factory in logic layer
@@ -63,6 +66,7 @@ namespace TestMVC_HoteLandLyst.ApiController
                 return cust;
             }
         }
+
         public DataTable GetAllRooms()
         {
             using (command = new SqlCommand("USE HotelLandLyst Select * FROM Room", conn))
@@ -80,6 +84,7 @@ namespace TestMVC_HoteLandLyst.ApiController
                 return dt;
             }
         }
+
         public DataTable GetRoomAccessories()
         {
             using (
