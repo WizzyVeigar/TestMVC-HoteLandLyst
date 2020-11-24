@@ -1,0 +1,23 @@
+﻿@model IEnumerable<TestMVC_HoteLandLyst.Models.Room>
+@{
+    ViewData["Title"] = "Rooms overview";
+}
+
+<h2>My Rooms list</h2>
+@{
+    foreach (var room in Model)
+    {
+        <div class="col-m6">
+            <div>
+                <h1><a asp-controller="RoomDetails" asp-action="Index" asp-route-id="@room.RoomNumber">@room.RoomNumber</a></h1>
+                @foreach (RoomAccessory item in room.RoomAccessories)
+                {
+                    @item.AccessoryName
+                }
+
+            </div>
+        </div>
+    }
+}
+
+<p>Hello from our View Template!</p>
