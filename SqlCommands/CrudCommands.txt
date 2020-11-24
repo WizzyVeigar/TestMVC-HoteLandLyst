@@ -1,0 +1,63 @@
+InsertStatemenets
+
+
+insert into RoomStatus(RoomStatusValue) values ('Available');
+insert into RoomStatus(RoomStatusValue) values ('Dirty');
+insert into RoomStatus(RoomStatusValue) values ('In Use');
+
+insert into RoomAccessory(AccName, ExtraCharge) values('Altan', 150);
+insert into RoomAccessory(AccName, ExtraCharge) values('DobbeltSeng', 200);
+insert into RoomAccessory(AccName, ExtraCharge) values('To enkeltsenge', 200);
+insert into RoomAccessory(AccName, ExtraCharge) values('Badekar', 50);
+insert into RoomAccessory(AccName, ExtraCharge) values('Jacuzzi', 175);
+insert into RoomAccessory(AccName, ExtraCharge) values('Eget køkken', 350);
+
+insert into Room(DayPrice,RoomStatusValue) values (695, 'Available');
+insert into Room(DayPrice,RoomStatusValue) values (695, 'Available');
+insert into Room(DayPrice,RoomStatusValue) values (695, 'Available');
+insert into Room(DayPrice,RoomStatusValue) values (695, 'Available');
+insert into Room(DayPrice,RoomStatusValue) values (695, 'Available');
+
+insert into RoomAccessoryList(RAId, RoomNumber) values (1, 100);
+insert into RoomAccessoryList(RAId, RoomNumber) values (4, 100);
+insert into RoomAccessoryList(RAId, RoomNumber) values (6, 101);
+insert into RoomAccessoryList(RAId, RoomNumber) values (5, 102);
+insert into RoomAccessoryList(RAId, RoomNumber) values (6, 102);
+insert into RoomAccessoryList(RAId, RoomNumber) values (2, 102);
+insert into RoomAccessoryList(RAId, RoomNumber) values (3, 103);
+insert into RoomAccessoryList(RAId, RoomNumber) values (4, 103);
+insert into RoomAccessoryList(RAId, RoomNumber) values (3, 104);
+insert into RoomAccessoryList(RAId, RoomNumber) values (1, 104);
+insert into RoomAccessoryList(RAId, RoomNumber) values (1, 105);
+
+insert into City(CityAreaCode, AreaName) values (4130, 'Viby Sjælland');
+insert into City(CityAreaCode, AreaName) values (4000, 'Roskilde');
+insert into City(CityAreaCode, AreaName) values (1050, 'København K');
+insert into City(CityAreaCode, AreaName) values (5000, 'Odense C');
+insert into City(CityAreaCode, AreaName) values (2670, 'Greve');
+
+insert into Customer(customerFName, customerLName, customerAddress, CityAreaCode, customerEmail, customerPhone)
+values
+('Bob', 'Larsen', 'SuperStræde 47', 2670, 'BobHasAnEmail@something.yay', '60606667');
+
+insert into Customer(customerFName, customerLName, customerAddress, CityAreaCode, customerEmail, customerPhone)
+values
+('Steve', 'Irwin', 'Middlefartsvej 8', 4130, 'Steveirwin@Crikey.golly', '55599933');
+
+insert into Customer(customerFName, customerLName, customerAddress, CityAreaCode, customerEmail, customerPhone)
+values
+('Kim', 'Larsen', 'SuperStræde 47', 1050, 'IglesiasWithAn@I.What', '99999999');
+
+insert into Customer(customerFName, customerLName, customerAddress, CityAreaCode, customerEmail, customerPhone)
+values
+('Sir. Golden', 'Shitter', 'Fynvej den 3.', 5000, 'RandomEmail@Random.random', '46205531');
+
+insert into Customer(customerFName, customerLName, customerAddress, CityAreaCode, customerEmail, customerPhone)
+values
+('Carl', 'Brok', 'Middle of nowhere', 2670, 'Whyarewhestillhere@wheeze.Suffer', '69699696');
+
+
+select Room.RoomNumber, RoomAccessory.AccName
+from Room, RoomAccessory
+inner join RoomAccessoryList
+on RoomAccessoryList.RAId = RoomAccessory.RaId

@@ -1,0 +1,108 @@
+HotelLandLyst SQL 
+
+
+use HotelLandLyst;
+
+drop table if exists Reservation, Customer, City, RoomAccessoryList, Room, RoomStatus, RoomAccessory
+
+create table RoomAccessory(
+RaId int primary key identity(1,1),
+AccName varchar(200) not null,
+ExtraCharge decimal(18,2) not null
+);
+
+create table RoomStatus(
+RoomStatusValue varchar(50) primary key
+);
+
+create table Room(
+RoomNumber int primary key identity(100,1),
+DayPrice decimal(18,2) not null,
+RoomStatusValue varchar(50),
+foreign key(RoomStatusValue) references RoomStatus(RoomStatusValue)
+);
+
+create table RoomAccessoryList(
+RoomNumber int not null,
+RAId int not null,
+foreign key(RoomNumber) references Room(RoomNumber),
+foreign key(RAId) references RoomAccessory(RAId),
+primary key(RoomNumber, RAId)
+);
+
+create table City(
+CityAreaCode int primary key,
+AreaName varchar(200)
+);
+
+create table Customer(
+customerPhone varchar(20) primary key,
+customerFName varchar(100) not null,
+customerLName varchar(100) not null,
+customerAddress varchar(500),
+CityAreaCode int not null,
+customerEmail varchar(200) not null
+foreign key(CityAreaCode) references City(CityAreaCode)
+);
+
+create table Reservation(
+ReservationId int primary key identity(1000,1),
+RoomNumber int not null,
+customerPhone varchar(20) not null,
+ReservationPrice decimal(18,2) not null,
+StartDate DateTime not null,
+EndDate DateTime not null,
+foreign key(RoomNumber) references Room(RoomNumber),
+foreign key(customerPhone) references Customer(customerPhone)
+);
+
+
+
+
+
+
+
+
+
+
+create procedure GetRoomTotalPrice @RoomId int
+as
+select Sum(DayPrice) + Sum(ExtraCharge) as TotalPrice
+from Room
+inner join RoomAccessoryList
+on RoomAccessoryList.RoomNumber = Room.RoomNumber
+inner join RoomAccessory
+on RoomAccessory.RaId = RoomAccessoryList.RAId
+where Room.RoomNumber = @RoomId
+group by Room.RoomNumber;
+
+
+
+create procedure MakeReservation  
+@RoomNumber int, @customerPhone varchar(20), @StartDate DateTime, 
+@EndDate DateTime
+as
+
+declare @dayAmount int = (Select DATEDIFF(day, @startdate, @enddate))
+declare @TotalAmount int  exec GetRoomTotalPrice @RoomId = @RoomNumber
+
+insert into Reservation(customerPhone, RoomNumber, StartDate, EndDate, ReservationPrice)
+values(
+	(SELECT Customer.customerPhone from Customer where customerPhone = @customerPhone),
+	@RoomNumber, 
+	@StartDate,
+	@EndDate, 
+	case when @dayAmount >= 7 then @TotalAmount * 0.9
+	end	
+);
+
+
+create procedure MakeCustomer @customerFName varchar(100), @customerLName varchar(100), 
+@customerAddress varchar(500), @customerPhone varchar(20), 
+@customerEmail varchar(200), @customerAreaCode int
+
+AS
+
+insert into Customer(customerFName, customerLName, customerAddress, CityAreaCode, customerEmail, customerPhone)
+values
+(@customerFName, @customerLName, @customerAddress, @customerAreaCode, @customerEmail, @customerPhone)
