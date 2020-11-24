@@ -24,7 +24,6 @@ namespace TestMVC_HoteLandLyst.Factories
         }
 
         private List<Room> rooms = new List<Room>();
-
         public List<Room> Rooms
         {
             get { return rooms; }

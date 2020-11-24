@@ -10,8 +10,6 @@ using TestMVC_HoteLandLyst.Models;
 
 namespace TestMVC_HoteLandLyst.ApiController
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class MsSqlManager
     {
 
