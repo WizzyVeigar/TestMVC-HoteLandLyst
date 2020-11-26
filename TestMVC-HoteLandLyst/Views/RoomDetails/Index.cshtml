@@ -3,7 +3,8 @@
     ViewData["Title"] = "Room" + Model.Room.RoomNumber + "Details";
 }
 <h1>Welcome to room @Model.Room.RoomNumber!</h1>
-<h4>This room costs @Model.Room.ToString() kr. daily</h4>
+@*<h4>This room costs @Model.Room.ToString() kr. daily</h4>*@
+@Html.LabelForModel("This room costs " + Model.Room.ToString() + " kr. daily", new { id = "RoomPrice" })
 
 <form class="needs-validation" novalidate asp-action="AddToBooking" asp-controller="Booking">
     <div class="form-group">
@@ -11,7 +12,7 @@
             <div class="col">
 
                 <label class="col-form-label" for="fname">First name:</label><br>
-                <input class="form-control" type="text" id="fname" name="fname" placeholder="First Name" required asp-for="Customer.FName">
+                @Html.EditorFor(model => model.Customer.FName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                 <div class="invalid-feedback">
                     Please write your first name.
                 </div>
@@ -19,7 +20,7 @@
             <div class="col">
 
                 <label class="col-form-label" for="lname" asp-for="Customer.LName">Last name:</label><br>
-                <input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" required asp-for="Customer.LName">
+                @Html.EditorFor(model => model.Customer.LName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                 <div class="invalid-feedback">
                     Please write your last name.
                 </div>
@@ -29,14 +30,14 @@
             <div class="col">
 
                 <label class="col-form-label" for="phoneNum" asp-for="Customer.PhoneNumber">Phone Number:</label><br>
-                <input class="form-control" type="text" id="phoneNum" name="phoneNum" required asp-for="Customer.PhoneNumber">
+                @Html.EditorFor(model => model.Customer.PhoneNumber, new { htmlAttributes = new { @class = "form-control", min = "8", max = "8", required = "required" } })
                 <div class="invalid-feedback">
                     Please write your phone number.
                 </div>
             </div>
             <div class="col">
                 <label class="col-form-label" for="address" asp-for="Customer.Address">Address:</label><br>
-                <input class="form-control" type="text" id="address" name="address" required asp-for="Customer.Address">
+                @Html.EditorFor(model => model.Customer.Address, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                 <div class="invalid-feedback">
                     Please write your full address.
                 </div>
@@ -45,9 +46,7 @@
         <div class="form-row">
             <div class="col">
                 <label class="label col-form-label" for="start" asp-for="StartDate">Start date:</label><br>
-                <input class="form-control" type="date" id="start" name="booking-start"
-                       pattern="\d{2}-\d{2}-\d{4}"
-                       min="01-01-2020" max="12-31-2030" required asp-for="StartDate">
+                @Html.TextBoxFor(model => model.StartDate, "{0:dd-MM-yyyy}", new { @class = "form-control", type = "date", required = "required" })
                 <div class="invalid-feedback">
                     Please insert a valid date.
                 </div>
@@ -55,10 +54,7 @@
             </div>
             <div class="col">
                 <label class="label col-form-label" for="end" asp-for="EndDate">End date:</label><br>
-                <input class="form-control" type="date" id="end" name="booking-end"
-                       pattern="\d{2}-\d{2}-\d{4}"
-                       placeholder="DD/MM/YYYY"
-                       min="01-01-2020" max="12-31-2030" required asp-for="EndDate">
+                @Html.TextBoxFor(model => model.EndDate, "{0:dd-MM-yyyy}", new { @class = "form-control", type = "date", required = "required" })
                 <div class="invalid-feedback">
                     Please insert a valid date.
                 </div>
@@ -68,7 +64,7 @@
     <div class="form-group">
         <div class="form-row">
             <div class="col">
-                    <button class="btn btn-success btn-block" type="submit" id="submitButton" name="submitButton">Submit booking</button>
+                <button class="btn btn-success btn-block" type="submit" id="submitButton" name="submitButton">Submit booking</button>
             </div>
         </div>
     </div>

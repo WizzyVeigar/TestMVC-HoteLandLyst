@@ -14,7 +14,8 @@ namespace TestMVC_HoteLandLyst.ApiController
     {
 
         //Lav sql component factory til oprettelse af objekter
-        const string connectionstring = @"Server = (localdb)\MSSQLLocalDB; Database=HotelLandLyst;User Id = sa; Password=Qwert12345!";
+        //const string connectionstring = @"Server = (localdb)\MSSQLLocalDB; Database=HotelLandLyst;User Id = sa; Password=Qwert12345!";
+        const string connectionstring = @"Server = DESKTOP-M6E4F8M; Database=HotelLandLyst;User Id = sa; Password=Qwert12345!";
 
         private SqlConnection conn;
         SqlCommand command;

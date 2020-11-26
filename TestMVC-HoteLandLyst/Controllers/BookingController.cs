@@ -24,7 +24,6 @@ namespace TestMVC_HoteLandLyst.Controllers
             }
             else
             {
-                
             }
         }
     }
