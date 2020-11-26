@@ -5,29 +5,20 @@ using System.Threading.Tasks;
 
 namespace TestMVC_HoteLandLyst.Models
 {
-    public enum RoomStatus
-    {
-        Available,
-        Dirty,
-        InUse
-    }
-
     public class Room
     {
         public int RoomNumber { get; set; }
         public decimal DayPrice { get; set; }
-        public RoomStatus RoomStatus { get; set; }
-        public List<RoomAccessory> RoomAccessories { get; set; }
+        public List<RoomAccessoryModel> RoomAccessories { get; set; }
 
-        public Room(int roomNumber, RoomStatus status)
+        public Room(int roomNumber)
         {
             RoomNumber = roomNumber;
-            RoomStatus = status;
             DayPrice = 695;
-            RoomAccessories = new List<RoomAccessory>();
+            RoomAccessories = new List<RoomAccessoryModel>();
         }
 
-        public Room(int roomNumber, decimal price, RoomStatus status) : this(roomNumber, status)
+        public Room(int roomNumber, decimal price) : this(roomNumber)
         {
             DayPrice = price;
         }

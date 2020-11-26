@@ -86,10 +86,7 @@ namespace TestMVC_HoteLandLyst.ApiController
         public DataTable GetRoomAccessories()
         {
             using (
-                command = new SqlCommand("select Room.RoomNumber, AccName, ExtraCharge " +
-                "from Room " +
-                "left join RoomAccessoryList on RoomAccessoryList.RoomNumber = Room.RoomNumber " +
-                "left join RoomAccessory on RoomAccessory.RaId = RoomAccessoryList.RAId", conn))
+                command = new SqlCommand("Exec GetRoomAccessories", conn))
             {
                 dt = new DataTable();
                 SqlDataAdapter adapter = new SqlDataAdapter();

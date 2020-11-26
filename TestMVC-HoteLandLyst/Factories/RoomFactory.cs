@@ -38,7 +38,7 @@ namespace TestMVC_HoteLandLyst.Factories
             }
         }
 
-        //Should probably be in it's own constructor
+        //Should maybe be in it's own constructor
         private void CreateRoomAccessories(List<Room> rooms)
         {
             DataTable dt = MsSqlManager.Instance.GetRoomAccessories();
@@ -49,7 +49,7 @@ namespace TestMVC_HoteLandLyst.Factories
                 {
                     if (Convert.ToInt32(row[0]) == rooms[i].RoomNumber)
                     {
-                        rooms[i].RoomAccessories.Add(new RoomAccessory(row[1].ToString(), (decimal)row[2]));
+                        rooms[i].RoomAccessories.Add(new RoomAccessoryModel(row[1].ToString(), (decimal)row[2]));
                     }
                 }
             }
@@ -61,23 +61,11 @@ namespace TestMVC_HoteLandLyst.Factories
             DataTable dataTable = MsSqlManager.Instance.GetAllRooms();
             foreach (DataRow row in dataTable.Rows)
             {
-                Rooms.Add(new Room(Convert.ToInt32(row[0]), (decimal)row[1], ConvertToRoomStatus(row[2].ToString())));
+                Rooms.Add(new Room(Convert.ToInt32(row[0]), (decimal)row[1]));
             }
 
             CreateRoomAccessories(rooms);
             return Rooms;
-        }
-        private RoomStatus ConvertToRoomStatus(string statusString)
-        {
-            foreach (string name in Enum.GetNames(typeof(RoomStatus)))
-            {
-                if (name == statusString)
-                {
-                    return (RoomStatus)Enum.Parse(typeof(RoomStatus), statusString);
-                }
-            }
-            //Log error
-            return RoomStatus.Dirty;
         }
     }
 }

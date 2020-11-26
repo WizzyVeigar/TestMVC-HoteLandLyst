@@ -16,9 +16,9 @@ namespace TestMVC_HoteLandLyst.Controllers
             {
                 return NotFound();
             }
-
             Room room = RoomFactory.Instance.Rooms.Where(room => room.RoomNumber == id).FirstOrDefault();
-            return View(room);
+            BookingModel bookingModel = new BookingModel() { Room = room };
+            return View(bookingModel);
         }
     }
 }

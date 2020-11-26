@@ -24,7 +24,10 @@ namespace TestMVC_HoteLandLyst
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+            });
             
         }
 
@@ -43,6 +46,9 @@ namespace TestMVC_HoteLandLyst
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            //Enables session
+            app.UseSession();
 
             app.UseRouting();
 

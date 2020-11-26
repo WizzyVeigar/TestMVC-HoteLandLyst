@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace TestMVC_HoteLandLyst.Models
 {
-    public class RoomAccessory
+    public class RoomAccessoryModel
     {
-        public RoomAccessory(string accessoryName, decimal extraCharge)
+        public RoomAccessoryModel(string accessoryName, decimal extraCharge)
         {
             AccessoryName = accessoryName;
             ExtraCharge = extraCharge;
