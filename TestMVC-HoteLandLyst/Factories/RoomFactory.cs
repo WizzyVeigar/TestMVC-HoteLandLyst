@@ -49,7 +49,7 @@ namespace TestMVC_HoteLandLyst.Factories
         /// <param name="rooms">The list of rooms without any accessories yet</param>
         private void CreateRoomAccessories(List<Room> rooms)
         {
-            DataTable dt = MsSqlConnection.Instance.ExecuteSP("Exec GetRoomAccessories");
+            DataTable dt = MsSqlConnection.Instance.ExecuteSP("GetRoomAccessories");
 
             foreach (DataRow row in dt.Rows)
             {
@@ -66,7 +66,7 @@ namespace TestMVC_HoteLandLyst.Factories
         public IList<Room> CreateAll()
         {
             ClearRooms();
-            DataTable dataTable = MsSqlConnection.Instance.ExecuteSP("Exec GetAllRooms");
+            DataTable dataTable = MsSqlConnection.Instance.ExecuteSP("GetAllRooms");
             foreach (DataRow row in dataTable.Rows)
             {
                 Instance.Rooms.Add(new Room(Convert.ToInt32(row[0]), (decimal)row[1]));

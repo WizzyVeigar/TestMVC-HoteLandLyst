@@ -5,14 +5,34 @@
 }
 
 <h1>CheckOut</h1>
+<ul>
 
+    @{
+        try
+        {
+
+            foreach (BookingModel room in Model.RoomsToBook)
+            {
+                <li>@room.Room.RoomNumber</li>
+                <li>@room.StartDate</li>
+                <li>@room.EndDate</li>
+                <li></li>
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+</ul>
 <form class="needs-validation" novalidate asp-action="MakeReservation" asp-controller="CheckOut">
     <div class="form-group">
         <div class="form-row">
             <div class="col">
 
                 <label class="col-form-label" for="fname">First name:</label><br>
-                <input class="form-control" type="text" id="fname" name="fname" placeholder="First Name" required asp-for ="Customer.FName">
+                <input class="form-control" type="text" id="fname" name="fname" placeholder="First Name" required asp-for="Customer.FName">
                 <div class="invalid-feedback">
                     Please write your first name.
                 </div>

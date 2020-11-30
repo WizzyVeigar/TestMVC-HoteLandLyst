@@ -1,5 +1,6 @@
 ﻿@model TestMVC_HoteLandLyst.Models.BookingModel;
 @{
+
     ViewData["Title"] = "Room" + Model.Room.RoomNumber + "Details";
 }
 
@@ -7,25 +8,27 @@
 @*<h4>This room costs @Model.Room.ToString() kr. daily</h4>*@
 @Html.LabelForModel("This room costs " + Model.Room.ToString() + " kr. daily", new { id = "RoomPrice" })
 
-<form class="needs-validation" novalidate asp-action="AddToBooking" asp-controller="RoomDetails">
+@using (Html.BeginForm("AddToBooking", "RoomDetails", FormMethod.Post, new { @class = "needs-validation" }))
+{
+    @*<form class="needs-validation" novalidate>*@
     <div class="form-group">
         <div class="form-row">
             <div class="col">
                 <label class="label col-form-label">Start date:</label><br>
-                @Html.EditorFor(model => model.StartDate, new 
-                {
-                   htmlAttributes = new
-                   {
-                       @type = "date",
-                       @class = "form-control",
-                       value = "",
-                       pattern = @"\d{2}-\d{2}-\d{4}",
-                       min = "01-01-2020",
-                       max = "12-31-2030",
-                       id ="startDate",
-                       required = "required"
-                   }
-                })
+                @Html.EditorFor(model => model.StartDate, new
+           {
+               htmlAttributes = new
+               {
+                   @type = "date",
+                   @class = "form-control",
+                   value = "",
+                   pattern = @"\d{2}-\d{2}-\d{4}",
+                   min = "01-01-2020",
+                   max = "12-31-2030",
+                   id = "startDate",
+                   required = "required"
+               }
+           })
                 <div class="invalid-feedback">
                     Please insert a valid date.
                 </div>
@@ -34,19 +37,19 @@
             <div class="col">
                 <label class="label col-form-label">End date:</label><br>
                 @Html.EditorFor(model => model.EndDate, new
-                {
-                   htmlAttributes = new
-                   {
-                       @type = "date",
-                       @class = "form-control",
-                       value = "",
-                       pattern = @"\d{2}-\d{2}-\d{4}",
-                       min = "01-01-2020",
-                       max = "12-31-2030",
-                       id = "endDate",
-                       required = "required"
-                   }
-                })
+           {
+               htmlAttributes = new
+               {
+                   @type = "date",
+                   @class = "form-control",
+                   value = "",
+                   pattern = @"\d{2}-\d{2}-\d{4}",
+                   min = "01-01-2020",
+                   max = "12-31-2030",
+                   id = "endDate",
+                   required = "required"
+               }
+           })
                 <div class="invalid-feedback">
                     Please insert a valid date.
                 </div>
@@ -60,7 +63,8 @@
             </div>
         </div>
     </div>
-</form>
+    @*</form>*@
+}
 
 <script type="text/javascript" src="~/js/ValidationSubmit.js"></script>
 <script type="text/javascript" src="~/js/PriceChanger.js"></script>

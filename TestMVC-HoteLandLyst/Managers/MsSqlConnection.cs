@@ -76,7 +76,6 @@ namespace TestMVC_HoteLandLyst.Managers
                         }
                         try
                         {
-
                             dataReader.Close();
                             adapter.Fill(dt);
                             adapter.Dispose();
@@ -110,10 +109,11 @@ namespace TestMVC_HoteLandLyst.Managers
             {
                 SqlCommand command = GetSqlCommand();
                 command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = query;
+                command.Connection = conn;
                 DataTable dt = GetDataTable();
                 SqlDataAdapter adapter = GetAdapter();
                 SqlDataReader dataReader;
-                //"USE HotelLandLyst Select * FROM Room"
 
                 conn.ConnectionString = GetConnectionString();
                 conn.Open();

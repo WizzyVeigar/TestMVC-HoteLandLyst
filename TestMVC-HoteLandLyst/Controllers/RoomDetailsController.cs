@@ -24,7 +24,7 @@ namespace TestMVC_HoteLandLyst.Controllers
             {
                 bookingModel.Room = RoomFactory.Instance.Rooms.Where(room => room.RoomNumber == id).FirstOrDefault();
                 HttpContext.Session.SetObjectAsJson("currentRoom", bookingModel);
-                
+
                 return View(bookingModel);
             }
             catch (Exception)
@@ -41,8 +41,11 @@ namespace TestMVC_HoteLandLyst.Controllers
         /// Add the chosen room to the local list of booked rooms
         /// </summary>
         /// <param name="currentRoom">The current room you want to book</param>
+        
+        [HttpPost]
         public IActionResult AddToBooking(BookingModel currentRoom)
         {
+
             //Temporary addition of hours
             currentRoom.StartDate.AddHours(10);
 
@@ -53,7 +56,7 @@ namespace TestMVC_HoteLandLyst.Controllers
             }
             else
             {
-                HttpContext.Session.SetObjectAsJson("UserBookings", currentRoom);
+                HttpContext.Session.SetObjectAsJson("UserBookings", new List<BookingModel>() { currentRoom });
             }
 
             return RedirectToAction("Index", "Rooms");

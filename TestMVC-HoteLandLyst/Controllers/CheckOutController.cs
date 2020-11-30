@@ -13,7 +13,9 @@ namespace TestMVC_HoteLandLyst.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            FullReservationModel fullReservation = new FullReservationModel() { RoomsToBook = GetReservations() };
+
+            return View(fullReservation);
         }
         
         public void MakeReservation(Customer customerValues)
