@@ -4,7 +4,8 @@
 }
 
 <h1>Welcome to room @Model.Room.RoomNumber!</h1>
-<h4>This room costs @Model.Room.ToString() kr. daily</h4>
+@*<h4>This room costs @Model.Room.ToString() kr. daily</h4>*@
+@Html.LabelForModel("This room costs " + Model.Room.ToString() + " kr. daily", new { id = "RoomPrice" })
 
 <form class="needs-validation" novalidate asp-action="AddToBooking" asp-controller="RoomDetails">
     <div class="form-group">
