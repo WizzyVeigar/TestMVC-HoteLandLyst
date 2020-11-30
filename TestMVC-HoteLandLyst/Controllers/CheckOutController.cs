@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.Extensions;
 using TestMVC_HoteLandLyst.Models;
-using TestMVC_HoteLandLyst.Managers;
+using TestMVC_HoteLandLyst.DalClasses;
 
 namespace TestMVC_HoteLandLyst.Controllers
 {

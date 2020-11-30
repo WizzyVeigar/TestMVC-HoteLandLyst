@@ -1,6 +1,5 @@
 ﻿@model TestMVC_HoteLandLyst.Models.BookingModel;
 @{
-
     ViewData["Title"] = "Room" + Model.Room.RoomNumber + "Details";
 }
 
@@ -8,9 +7,9 @@
 @*<h4>This room costs @Model.Room.ToString() kr. daily</h4>*@
 @Html.LabelForModel("This room costs " + Model.Room.ToString() + " kr. daily", new { id = "RoomPrice" })
 
-@using (Html.BeginForm("AddToBooking", "RoomDetails", FormMethod.Post, new { @class = "needs-validation" }))
-{
-    @*<form class="needs-validation" novalidate>*@
+@*@using (Html.BeginForm("AddToBooking", "RoomDetails", FormMethod.Post, new { @class = "needs-validation" }))
+    {*@
+<form class="needs-validation" novalidate>
     <div class="form-group">
         <div class="form-row">
             <div class="col">
@@ -32,8 +31,8 @@
                 <div class="invalid-feedback">
                     Please insert a valid date.
                 </div>
-
             </div>
+
             <div class="col">
                 <label class="label col-form-label">End date:</label><br>
                 @Html.EditorFor(model => model.EndDate, new
@@ -59,12 +58,13 @@
     <div class="form-group">
         <div class="form-row">
             <div class="col">
-                <button class="btn btn-success btn-block" type="submit" id="submitButton" name="submitButton">Submit booking</button>
+                @*<button class="btn btn-success btn-block" type="submit" id="submitButton" name="submitButton">Submit booking</button>*@
+                @Html.ActionLink("Submit Button", "AddToBooking", "RoomDetails", new { BookingModel = Model }, new {@class= "btn btn-success btn-block", value="Submit Booking" })
             </div>
         </div>
     </div>
-    @*</form>*@
-}
+</form>
+@*}*@
 
 <script type="text/javascript" src="~/js/ValidationSubmit.js"></script>
 <script type="text/javascript" src="~/js/PriceChanger.js"></script>
