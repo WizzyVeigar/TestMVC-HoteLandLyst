@@ -12,10 +12,10 @@ namespace TestMVC_HoteLandLyst.Models
         /// <summary>
         /// List of rooms customer wants booked
         /// </summary>
-        public List<BookingModel> roomsToBook { get; set; }
+        public List<BookingModel> RoomsToBook { get; set; }
         /// <summary>
         /// Customer who booked the rooms
         /// </summary>
-        public Customer customer { get; set; }
+        public Customer Customer { get; set; }
     }
 }

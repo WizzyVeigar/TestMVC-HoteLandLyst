@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace TestMVC_HoteLandLyst.Models
 {
+    //Model for a hotel room
     public class Room
     {
         public int RoomNumber { get; set; }

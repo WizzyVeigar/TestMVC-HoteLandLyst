@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using TestMVC_HoteLandLyst.ApiController;
+using TestMVC_HoteLandLyst.Managers;
 using TestMVC_HoteLandLyst.Models;
 
 namespace TestMVC_HoteLandLyst.Factories
 {
-    public class RoomFactory : IFactory<Room>
+    public class RoomFactory : ICreateMultiple<Room>
     {
+        private List<Room> rooms;
+        public List<Room> Rooms
+        {
+            get { return rooms; }
+            set { rooms = value; }
+        }
+
         private static RoomFactory instance;
         public static RoomFactory Instance
         {
@@ -18,30 +25,31 @@ namespace TestMVC_HoteLandLyst.Factories
                 if (instance == null)
                 {
                     instance = new RoomFactory();
+                    instance.Rooms = new List<Room>();
                 }
                 return instance;
             }
         }
 
-        private List<Room> rooms = new List<Room>();
-        public List<Room> Rooms
-        {
-            get { return rooms; }
-            set { rooms = value; }
-        }
 
+        /// <summary>
+        /// Clears the <see cref="Instance.Rooms"/>
+        /// </summary>
         private void ClearRooms()
         {
-            if (Rooms.Count > 0)
+            if (Instance.Rooms.Count > 0)
             {
-                Rooms.Clear();
+                Instance.Rooms.Clear();
             }
         }
 
-        //Should maybe be in it's own constructor
+        /// <summary>
+        /// Create RoomAccessories and attach them to the correct room from <paramref name="rooms"/>
+        /// </summary>
+        /// <param name="rooms">The list of rooms without any accessories yet</param>
         private void CreateRoomAccessories(List<Room> rooms)
         {
-            DataTable dt = MsSqlManager.Instance.GetRoomAccessories();
+            DataTable dt = MsSqlConnection.Instance.ExecuteSP("Exec GetRoomAccessories");
 
             foreach (DataRow row in dt.Rows)
             {
@@ -58,14 +66,14 @@ namespace TestMVC_HoteLandLyst.Factories
         public IList<Room> CreateAll()
         {
             ClearRooms();
-            DataTable dataTable = MsSqlManager.Instance.GetAllRooms();
+            DataTable dataTable = MsSqlConnection.Instance.ExecuteSP("Exec GetAllRooms");
             foreach (DataRow row in dataTable.Rows)
             {
-                Rooms.Add(new Room(Convert.ToInt32(row[0]), (decimal)row[1]));
+                Instance.Rooms.Add(new Room(Convert.ToInt32(row[0]), (decimal)row[1]));
             }
 
-            CreateRoomAccessories(rooms);
-            return Rooms;
+            CreateRoomAccessories(Instance.Rooms);
+            return Instance.Rooms;
         }
     }
 }

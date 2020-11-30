@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace TestMVC_HoteLandLyst.Models
 {
+    //Model for a hotel room accessory
     public class RoomAccessoryModel
     {
         public RoomAccessoryModel(string accessoryName, decimal extraCharge)

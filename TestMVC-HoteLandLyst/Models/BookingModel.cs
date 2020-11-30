@@ -10,7 +10,6 @@ namespace TestMVC_HoteLandLyst.Models
     public class BookingModel
     {
         public Room Room { get; set; }
-        public Customer Customer { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal reservationPrice { get; set; }

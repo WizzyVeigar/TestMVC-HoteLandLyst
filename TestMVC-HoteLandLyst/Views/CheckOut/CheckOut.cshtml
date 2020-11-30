@@ -1,0 +1,47 @@
+﻿@model TestMVC_HoteLandLyst.Models.FullReservationModel
+
+@{
+    ViewData["Title"] = "CheckOut";
+}
+
+<h1>CheckOut</h1>
+
+<form class="needs-validation" novalidate asp-action="MakeReservation" asp-controller="CheckOut">
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col">
+
+                <label class="col-form-label" for="fname">First name:</label><br>
+                <input class="form-control" type="text" id="fname" name="fname" placeholder="First Name" required asp-for ="Customer.FName">
+                <div class="invalid-feedback">
+                    Please write your first name.
+                </div>
+            </div>
+            <div class="col">
+
+                <label class="col-form-label" for="lname" asp-for="Customer.LName">Last name:</label><br>
+                <input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" required asp-for="Customer.LName">
+                <div class="invalid-feedback">
+                    Please write your last name.
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+
+                <label class="col-form-label" for="phoneNum" asp-for="Customer.PhoneNumber">Phone Number:</label><br>
+                <input class="form-control" type="text" id="phoneNum" name="phoneNum" required asp-for="Customer.PhoneNumber">
+                <div class="invalid-feedback">
+                    Please write your phone number.
+                </div>
+            </div>
+            <div class="col">
+                <label class="col-form-label" for="address" asp-for="Customer.Address">Address:</label><br>
+                <input class="form-control" type="text" id="address" name="address" required asp-for="Customer.Address">
+                <div class="invalid-feedback">
+                    Please write your full address.
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
