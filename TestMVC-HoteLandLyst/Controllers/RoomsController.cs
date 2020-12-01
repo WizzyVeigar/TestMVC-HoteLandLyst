@@ -6,6 +6,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.Models;
 using TestMVC_HoteLandLyst.Factories;
+using System.Diagnostics;
 
 namespace TestMVC_HoteLandLyst.Controllers
 {
@@ -13,9 +14,16 @@ namespace TestMVC_HoteLandLyst.Controllers
     {
         public IActionResult Index()
         {
-            List<Room> rooms = (List<Room>)RoomFactory.Instance.CreateAll();
+            try
+            {
+                List<Room> rooms = (List<Room>)RoomFactory.Instance.CreateAll();
 
-            return View(rooms);
+                return View(rooms);
+            }
+            catch (Exception)
+            {
+                return View(new ErrorViewModel() { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
         }
     }
 }

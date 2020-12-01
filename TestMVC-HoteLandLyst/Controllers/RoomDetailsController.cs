@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.Factories;
 using TestMVC_HoteLandLyst.Models;
 using TestMVC_HoteLandLyst.Extensions;
+using System.Diagnostics;
 
 namespace TestMVC_HoteLandLyst.Controllers
 {
@@ -30,6 +31,7 @@ namespace TestMVC_HoteLandLyst.Controllers
             catch (Exception)
             {
                 //Room could not be found in instance.rooms
+                return View(new ErrorViewModel() { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
                 throw;
             }
 

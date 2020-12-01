@@ -1,10 +1,11 @@
 ﻿@model TestMVC_HoteLandLyst.Models.BookingModel;
 @{
-
     ViewData["Title"] = "Room" + Model.Room.RoomNumber + "Details";
 }
 
-<h1>Welcome to room @Model.Room.RoomNumber!</h1>
+<h1>
+   Welcome to room @{Html.DisplayFor(model => model.Room.RoomNumber);}!
+</h1>
 @*<h4>This room costs @Model.Room.ToString() kr. daily</h4>*@
 @Html.LabelForModel("This room costs " + Model.Room.ToString() + " kr. daily", new { id = "RoomPrice" })
 

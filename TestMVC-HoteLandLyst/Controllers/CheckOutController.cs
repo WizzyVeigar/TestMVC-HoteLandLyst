@@ -6,25 +6,36 @@ using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.Extensions;
 using TestMVC_HoteLandLyst.Models;
 using TestMVC_HoteLandLyst.Managers;
+using System.Diagnostics;
 
 namespace TestMVC_HoteLandLyst.Controllers
 {
     public class CheckOutController : Controller
     {
-        public IActionResult Index()
-        {
-            FullReservationModel fullReservation = new FullReservationModel() { RoomsToBook = GetReservations() };
+        FullReservationModel fullReservation;
 
-            return View(fullReservation);
+        public IActionResult Index(List<BookingModel> userBookings)
+        {
+            try
+            {
+                fullReservation = new FullReservationModel() { RoomsToBook = userBookings };
+                return View(fullReservation);
+            }
+            catch (Exception)
+            {
+                return View(new ErrorViewModel() { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
+
         }
-        
+
         public void MakeReservation(Customer customerValues)
         {
-            List<BookingModel> reservations = GetReservations();
-            //Make in factory
-            FullReservationModel reservationModel = new FullReservationModel { Customer = customerValues, RoomsToBook = reservations };
+            //List<BookingModel> reservations = GetReservations();
 
-            MsSqlConnection.Instance.MakeReservation(reservationModel);
+            //Make in factory
+            fullReservation.Customer = customerValues;
+
+            MsSqlConnection.Instance.MakeReservation(fullReservation);
         }
 
 
