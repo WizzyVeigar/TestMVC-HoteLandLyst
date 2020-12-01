@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using TestMVC_HoteLandLyst.Managers;
+using TestMVC_HoteLandLyst.DalClasses;
 using TestMVC_HoteLandLyst.Models;
 
 namespace TestMVC_HoteLandLyst.Factories

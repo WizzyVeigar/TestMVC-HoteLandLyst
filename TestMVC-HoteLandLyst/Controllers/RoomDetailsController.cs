@@ -43,9 +43,7 @@ namespace TestMVC_HoteLandLyst.Controllers
         /// Add the chosen room to the local list of booked rooms
         /// </summary>
         /// <param name="currentRoom">The current room you want to book</param>
-        
-        [HttpPost]
-        public IActionResult AddToBooking(BookingModel currentRoom)
+        public void AddToBooking(BookingModel currentRoom)
         {
 
             //Temporary addition of hours
@@ -58,10 +56,13 @@ namespace TestMVC_HoteLandLyst.Controllers
             }
             else
             {
-                HttpContext.Session.SetObjectAsJson("UserBookings", new List<BookingModel>() { currentRoom });
+                List<BookingModel> bookingModels = new List<BookingModel>();
+                bookingModels.Add(currentRoom);
+                //new List<BookingModel>() { bookingModels }
+                HttpContext.Session.SetObjectAsJson("UserBookings", bookingModels);
             }
 
-            return RedirectToAction("Index", "Rooms");
+            RedirectToAction("Index", "Rooms");
         }
     }
 }

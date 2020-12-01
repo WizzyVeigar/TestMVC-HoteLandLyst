@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.Models;
 
-namespace TestMVC_HoteLandLyst.Managers
+namespace TestMVC_HoteLandLyst.DalClasses
 {
     public class MsSqlConnection
     {
@@ -141,7 +141,9 @@ namespace TestMVC_HoteLandLyst.Managers
 
         private string GetConnectionString()
         {
-            return @"Server = (localdb)\MSSQLLocalDB; Database=HotelLandLyst;User Id = sa; Password=Qwert12345!";
+            //return @"Server = (localdb)\MSSQLLocalDB; Database=HotelLandLyst;User Id = sa; Password=Qwert12345!";
+            return @"Server = DESKTOP-M6E4F8M; Database=HotelLandLyst;User Id = sa; Password=Qwert12345!";
+            
         }
 
         private SqlDataAdapter GetAdapter()
