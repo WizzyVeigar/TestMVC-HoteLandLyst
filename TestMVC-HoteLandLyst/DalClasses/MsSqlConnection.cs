@@ -7,32 +7,68 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.Models;
+using Microsoft.Extensions.Configuration;
+using TestMVC_HoteLandLyst.Interfaces;
 
 namespace TestMVC_HoteLandLyst.DalClasses
 {
-    public class MsSqlConnection
+    public class MsSqlConnection : IDataAccess
     {
+        private readonly string connectionstring;
 
-        private static MsSqlConnection instance;
-        public static MsSqlConnection Instance
+        public MsSqlConnection(IConfiguration configuration)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new MsSqlConnection();
-                }
-                return instance;
-            }
+            connectionstring = configuration.GetConnectionString("Default");
         }
 
         /// <summary>
         /// Method for inputting <paramref name="reservationModel"/> into the database
         /// </summary>
         /// <param name="reservationModel">The reservations to put into the DB</param>
+        /// 
+        [HttpPost]
         internal void MakeReservation(FullReservationModel reservationModel)
         {
-            throw new NotImplementedException();
+            try
+            {
+                SqlConnection conn;
+                using (conn = GetSqlConnection())
+                {
+                    SqlCommand command = GetSqlCommand();
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "MakeReservation @RoomNumber, @customerPhone, @StartDate, @EndDate";
+                    command.Parameters.AddWithValue("@customerPhone", reservationModel.Customer.PhoneNumber);
+
+                    foreach (BookingModel booking in reservationModel.RoomsToBook)
+                    {
+                        command.Parameters.AddWithValue("@RoomNumber", booking.Room.RoomNumber);
+                        command.Parameters.AddWithValue("@StartDate", booking.StartDate);
+                        command.Parameters.AddWithValue("@EndDate", booking.EndDate);
+
+                        try
+                        {
+                            conn.Open();
+                            command.ExecuteNonQuery();
+                        }
+                        catch (SqlException ex)
+                        {
+                            //Log exception
+                            //throw;
+                        }
+                        finally
+                        {
+                            conn.Close();
+                        }
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         //This is way too much like the other method, how fix?
@@ -56,36 +92,21 @@ namespace TestMVC_HoteLandLyst.DalClasses
                         try
                         {
                             conn.Open();
-                        }
-                        catch (Exception)
-                        {
-                            //Connection failed to open
-                            //Inner exception 1
-                            throw;
-                        }
-                        try
-                        {
                             dataReader = command.ExecuteReader();
-                        }
-                        catch (Exception)
-                        {
-                            //Inner exception 2
-                            // Query tried to execute command.CommandText;
-                            //dataReader.Close();
-                            throw;
-                        }
-                        try
-                        {
                             dataReader.Close();
                             adapter.Fill(dt);
                             adapter.Dispose();
                             return dt.Rows[0];
                         }
-                        catch (Exception)
+                        catch (SqlException se)
                         {
-                            //Inner exception 3
-                            //error filling the datatable
-                            throw;
+                            //Connection failed to open
+                            //Inner exception 1
+                            throw se;
+                        }
+                        catch (Exception e)
+                        {
+                            throw e;
                         }
                     }
                 }
@@ -104,25 +125,93 @@ namespace TestMVC_HoteLandLyst.DalClasses
         /// <returns>Returns a datatable of the query result</returns>
         public DataTable ExecuteSP(string query)
         {
-            SqlConnection conn;
-            using (conn = GetSqlConnection())
+            try
             {
-                SqlCommand command = GetSqlCommand();
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandText = query;
-                command.Connection = conn;
-                DataTable dt = GetDataTable();
-                SqlDataAdapter adapter = GetAdapter();
-                SqlDataReader dataReader;
 
-                conn.ConnectionString = GetConnectionString();
-                conn.Open();
-                adapter.SelectCommand = command;
-                dataReader = command.ExecuteReader();
-                dataReader.Close();
-                adapter.Fill(dt);
-                adapter.Dispose();
-                return dt;
+                SqlConnection conn;
+                using (conn = GetSqlConnection())
+                {
+                    SqlCommand command = GetSqlCommand();
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = query;
+                    command.Connection = conn;
+                    DataTable dt = GetDataTable();
+                    SqlDataAdapter adapter = GetAdapter();
+                    SqlDataReader dataReader;
+
+                    conn.ConnectionString = connectionstring;
+                    try
+                    {
+                        conn.Open();
+                        adapter.SelectCommand = command;
+                        dataReader = command.ExecuteReader();
+                        dataReader.Close();
+                        adapter.Fill(dt);
+
+                    }
+                    catch (SqlException)
+                    {
+
+                        throw;
+                    }
+                    finally
+                    {
+                        adapter.Dispose();
+                        conn.Close();
+                    }
+                    return dt;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public DataTable ExecuteSPParam(string query, int paramId)
+        {
+            try
+            {
+
+                SqlConnection conn;
+                using (conn = GetSqlConnection())
+                {
+                    SqlCommand command = GetSqlCommand();
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = query;
+                    command.Connection = conn;
+                    command.Parameters.AddWithValue("@Id",paramId);
+                    DataTable dt = GetDataTable();
+                    SqlDataAdapter dataAdapter = GetAdapter();
+                    SqlDataReader dataReader;
+
+                    conn.ConnectionString = connectionstring;
+                    try
+                    {
+                        conn.Open();
+                        dataAdapter.SelectCommand = command;
+                        dataReader = command.ExecuteReader();
+                        dataReader.Close();
+                        dataAdapter.Fill(dt);
+                        return dt;
+
+                    }
+                    catch (SqlException e)
+                    {
+
+                        throw e;
+                    }
+                    finally
+                    {
+                        dataAdapter.Dispose();
+                        conn.Close();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
             }
         }
 
@@ -139,16 +228,10 @@ namespace TestMVC_HoteLandLyst.DalClasses
             return new DataTable();
         }
 
-        private string GetConnectionString()
-        {
-            //return @"Server = (localdb)\MSSQLLocalDB; Database=HotelLandLyst;User Id = sa; Password=Qwert12345!";
-            return @"Server = DESKTOP-M6E4F8M; Database=HotelLandLyst;User Id = sa; Password=Qwert12345!";
-            
-        }
-
         private SqlDataAdapter GetAdapter()
         {
             return new SqlDataAdapter();
         }
+
     }
 }

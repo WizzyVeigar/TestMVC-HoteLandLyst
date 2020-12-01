@@ -7,11 +7,19 @@ using TestMVC_HoteLandLyst.Factories;
 using TestMVC_HoteLandLyst.Models;
 using TestMVC_HoteLandLyst.Extensions;
 using System.Diagnostics;
+using TestMVC_HoteLandLyst.Interfaces;
 
 namespace TestMVC_HoteLandLyst.Controllers
 {
     public class RoomDetailsController : Controller
     {
+        private ICreateMultiple<Room> createMultiple;
+
+        public RoomDetailsController(ICreateMultiple<Room> createMultiple)
+        {
+            this.createMultiple = createMultiple;
+        }
+
         public IActionResult Index(int? id)
         {
             if (id == null)
@@ -23,16 +31,18 @@ namespace TestMVC_HoteLandLyst.Controllers
 
             try
             {
-                bookingModel.Room = RoomFactory.Instance.Rooms.Where(room => room.RoomNumber == id).FirstOrDefault();
+                bookingModel.Room = ((RoomFactory)createMultiple).GetSingle((int)id);
+
                 HttpContext.Session.SetObjectAsJson("currentRoom", bookingModel);
+                HttpContext.Response.Cookies.Append("currentRoom", bookingModel.Room.RoomNumber.ToString());
 
                 return View(bookingModel);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 //Room could not be found in instance.rooms
-                return View(new ErrorViewModel() { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-                throw;
+         
+                throw e;
             }
 
             //How To do this properly?
@@ -43,9 +53,12 @@ namespace TestMVC_HoteLandLyst.Controllers
         /// Add the chosen room to the local list of booked rooms
         /// </summary>
         /// <param name="currentRoom">The current room you want to book</param>
-        public void AddToBooking(BookingModel currentRoom)
+        [HttpPost]
+        public IActionResult AddToBooking(BookingModel currentRoom)
         {
+            string roomNumber = HttpContext.Request.Cookies["currentRoom"];
 
+            currentRoom.Room = ((RoomFactory)createMultiple).GetSingle(int.Parse(roomNumber));
             //Temporary addition of hours
             currentRoom.StartDate.AddHours(10);
 
@@ -62,7 +75,7 @@ namespace TestMVC_HoteLandLyst.Controllers
                 HttpContext.Session.SetObjectAsJson("UserBookings", bookingModels);
             }
 
-            RedirectToAction("Index", "Rooms");
+            return RedirectToAction("Index", "Rooms");
         }
     }
 }

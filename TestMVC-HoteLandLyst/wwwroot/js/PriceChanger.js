@@ -1,1 +1,1 @@
-﻿//Used for changing the price on the RoomDetails page
+﻿

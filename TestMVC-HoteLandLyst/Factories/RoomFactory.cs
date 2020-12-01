@@ -5,41 +5,35 @@ using System.Linq;
 using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.DalClasses;
 using TestMVC_HoteLandLyst.Models;
+using TestMVC_HoteLandLyst.Interfaces;
 
 namespace TestMVC_HoteLandLyst.Factories
 {
-    public class RoomFactory : ICreateMultiple<Room>
+    public class RoomFactory : ICreateMultiple<Room>, IGetSingle<Room>
     {
+        private IDataAccess dataAccess;
+        public RoomFactory(IDataAccess dataAccess)
+        {
+            this.dataAccess = dataAccess;
+            Rooms = new List<Room>();
+        }
+
+
         private List<Room> rooms;
         public List<Room> Rooms
         {
             get { return rooms; }
             set { rooms = value; }
-        }
-
-        private static RoomFactory instance;
-        public static RoomFactory Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new RoomFactory();
-                    instance.Rooms = new List<Room>();
-                }
-                return instance;
-            }
-        }
-
+        }        
 
         /// <summary>
         /// Clears the <see cref="Instance.Rooms"/>
         /// </summary>
         private void ClearRooms()
         {
-            if (Instance.Rooms.Count > 0)
+            if (Rooms.Count > 0)
             {
-                Instance.Rooms.Clear();
+                Rooms.Clear();
             }
         }
 
@@ -49,7 +43,7 @@ namespace TestMVC_HoteLandLyst.Factories
         /// <param name="rooms">The list of rooms without any accessories yet</param>
         private void CreateRoomAccessories(List<Room> rooms)
         {
-            DataTable dt = MsSqlConnection.Instance.ExecuteSP("GetRoomAccessories");
+            DataTable dt = dataAccess.ExecuteSP("GetRoomAccessories");
 
             foreach (DataRow row in dt.Rows)
             {
@@ -62,18 +56,35 @@ namespace TestMVC_HoteLandLyst.Factories
                 }
             }
         }
+        private void CreateRoomAccessories(Room room)
+        {
+            DataTable dt = dataAccess.ExecuteSPParam("GetRoomAccessoriesById", room.RoomNumber);
+            foreach (DataRow accessory in dt.Rows)
+            {
+                room.RoomAccessories.Add(new RoomAccessoryModel(accessory[0].ToString(), (decimal)accessory[1]));
+            }
+        }
 
         public IList<Room> CreateAll()
         {
             ClearRooms();
-            DataTable dataTable = MsSqlConnection.Instance.ExecuteSP("GetAllRooms");
+            DataTable dataTable = dataAccess.ExecuteSP("GetAllRooms");
             foreach (DataRow row in dataTable.Rows)
             {
-                Instance.Rooms.Add(new Room(Convert.ToInt32(row[0]), (decimal)row[1]));
+                Rooms.Add(new Room(Convert.ToInt32(row[0]), (decimal)row[1]));
             }
 
-            CreateRoomAccessories(Instance.Rooms);
-            return Instance.Rooms;
+            CreateRoomAccessories(Rooms);
+            return Rooms;
+        }
+
+        public Room GetSingle(int id)
+        {
+            DataTable dt = dataAccess.ExecuteSPParam("GetRoomById", id);
+            DataRow row = dt.Rows[0];
+            Room room =  new Room((int)row[0],(decimal)row[1]);
+            CreateRoomAccessories(room);
+            return room;
         }
     }
 }

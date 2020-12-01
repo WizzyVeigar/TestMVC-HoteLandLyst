@@ -5,10 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.DalClasses;
 using TestMVC_HoteLandLyst.Models;
+using TestMVC_HoteLandLyst.Interfaces;
 
 namespace TestMVC_HoteLandLyst.Factories
 {
-    public class CustomerFactory : ICreateSingle<Customer>
+    public class CustomerFactory
     {
         private static CustomerFactory instance;
         public static CustomerFactory Instance
@@ -23,6 +24,11 @@ namespace TestMVC_HoteLandLyst.Factories
             }
         }
 
+        /// <summary>
+        /// Creates a single object of Customer
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns>returns the newly made Customer object</returns>
         public Customer CreateSingle(DataRow row)
         {
             Customer cust = new Customer();

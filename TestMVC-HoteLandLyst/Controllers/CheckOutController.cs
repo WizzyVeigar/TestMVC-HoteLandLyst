@@ -7,6 +7,7 @@ using TestMVC_HoteLandLyst.Extensions;
 using TestMVC_HoteLandLyst.Models;
 using System.Diagnostics;
 using TestMVC_HoteLandLyst.DalClasses;
+using TestMVC_HoteLandLyst.Interfaces;
 
 namespace TestMVC_HoteLandLyst.Controllers
 {
@@ -14,10 +15,18 @@ namespace TestMVC_HoteLandLyst.Controllers
     {
         FullReservationModel fullReservation;
 
+        private IDataAccess DataAccess { get; set; }
+
+        public CheckOutController(IDataAccess dataAccess)
+        {
+            DataAccess = dataAccess;
+        }
+
         public IActionResult Index(List<BookingModel> userBookings)
         {
             try
             {
+                //Make in factory
                 fullReservation = new FullReservationModel() { RoomsToBook = userBookings };
                 return View(fullReservation);
             }
@@ -32,10 +41,9 @@ namespace TestMVC_HoteLandLyst.Controllers
         {
             //List<BookingModel> reservations = GetReservations();
 
-            //Make in factory
             fullReservation.Customer = customerValues;
 
-            MsSqlConnection.Instance.MakeReservation(fullReservation);
+            ((MsSqlConnection)DataAccess).MakeReservation(fullReservation);
         }
 
 

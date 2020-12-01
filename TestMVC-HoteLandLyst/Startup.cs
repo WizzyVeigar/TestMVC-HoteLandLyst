@@ -8,6 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TestMVC_HoteLandLyst.DalClasses;
+using TestMVC_HoteLandLyst.Factories;
+using TestMVC_HoteLandLyst.Interfaces;
+using TestMVC_HoteLandLyst.Models;
 
 namespace TestMVC_HoteLandLyst
 {
@@ -28,6 +32,9 @@ namespace TestMVC_HoteLandLyst
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
             });
+            services.AddScoped<IDataAccess, MsSqlConnection>();
+
+            services.AddScoped<ICreateMultiple<Room>, RoomFactory>();
             
         }
 

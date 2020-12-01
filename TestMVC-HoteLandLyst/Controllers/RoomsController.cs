@@ -7,22 +7,30 @@ using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.Models;
 using TestMVC_HoteLandLyst.Factories;
 using System.Diagnostics;
+using TestMVC_HoteLandLyst.Interfaces;
 
 namespace TestMVC_HoteLandLyst.Controllers
 {
     public class RoomsController : Controller
     {
+        private ICreateMultiple<Room> createMultiple;
+
+        public RoomsController(ICreateMultiple<Room> createMultiple)
+        {
+            this.createMultiple = createMultiple;
+        }
+
         public IActionResult Index()
         {
             try
             {
-                List<Room> rooms = (List<Room>)RoomFactory.Instance.CreateAll();
+                List<Room> rooms = (List<Room>)(createMultiple).CreateAll();
 
                 return View(rooms);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return View(new ErrorViewModel() { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                throw e;
             }
         }
     }

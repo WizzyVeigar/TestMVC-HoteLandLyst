@@ -5,27 +5,28 @@
 }
 
 <h1>CheckOut</h1>
-<ul>
-
-    @{
-        try
-        {
-
-            foreach (BookingModel room in Model.RoomsToBook)
+@{
+    <ul>
+        @{
+            try
             {
-                <li>@room.Room.RoomNumber</li>
-                <li>@room.StartDate</li>
-                <li>@room.EndDate</li>
-                <li></li>
+                foreach (BookingModel room in Model.RoomsToBook)
+                {
+                    <li>@room.Room.RoomNumber</li>
+                    <li>@room.StartDate</li>
+                    <li>@room.EndDate</li>
+                    <li></li>
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+
             }
         }
-        catch (Exception)
-        {
+    </ul>
+}
 
-            throw;
-        }
-    }
-</ul>
 <form class="needs-validation" novalidate asp-action="MakeReservation" asp-controller="CheckOut">
     <div class="form-group">
         <div class="form-row">

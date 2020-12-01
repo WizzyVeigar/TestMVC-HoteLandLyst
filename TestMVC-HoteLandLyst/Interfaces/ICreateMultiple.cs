@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TestMVC_HoteLandLyst.Factories
+namespace TestMVC_HoteLandLyst.Interfaces
 {
-    interface ICreateMultiple<T>
+    public interface ICreateMultiple<T>
     {
         /// <summary>
         /// Creates a <see cref="IList{T}"/> of the specified type
         /// </summary>
         /// <returns></returns>
-        public IList<T> CreateAll();
+        IList<T> CreateAll();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,6 +24,12 @@ namespace TestMVC_HoteLandLyst.Models
         public Room(int roomNumber, decimal price) : this(roomNumber)
         {
             DayPrice = price;
+        }
+
+        [JsonConstructor]
+        public Room(int roomNumber,decimal price, List<RoomAccessoryModel> roomAccessoryModels) : this(roomNumber, price)
+        {
+            RoomAccessories = roomAccessoryModels;
         }
 
         public override string ToString()
