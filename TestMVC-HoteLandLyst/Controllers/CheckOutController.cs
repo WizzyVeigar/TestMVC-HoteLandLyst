@@ -8,6 +8,7 @@ using TestMVC_HoteLandLyst.Models;
 using System.Diagnostics;
 using TestMVC_HoteLandLyst.DalClasses;
 using TestMVC_HoteLandLyst.Interfaces;
+using TestMVC_HoteLandLyst.Factories;
 
 namespace TestMVC_HoteLandLyst.Controllers
 {
@@ -22,34 +23,44 @@ namespace TestMVC_HoteLandLyst.Controllers
             DataAccess = dataAccess;
         }
 
-        public IActionResult Index(List<BookingModel> userBookings)
+        public IActionResult Index()
         {
             try
             {
                 //Make in factory
-                fullReservation = new FullReservationModel() { RoomsToBook = userBookings };
-                return View(fullReservation);
+                fullReservation = new FullReservationModel(GetReservations());
+                if (fullReservation.RoomsToBook != null)
+                {
+                    return View(fullReservation);
+                }
+                else
+                {
+                    throw new ArgumentNullException();
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return View(new ErrorViewModel() { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                return View("Error", new ErrorViewModel());
             }
 
         }
 
         public void MakeReservation(Customer customerValues)
         {
-            //List<BookingModel> reservations = GetReservations();
-
+            //Problematic singleton?
+            fullReservation.RoomsToBook = GetReservations();
+            if (fullReservation.RoomsToBook == null)
+            {
+                throw new ArgumentNullException();
+            }
             fullReservation.Customer = customerValues;
 
             ((MsSqlConnection)DataAccess).MakeReservation(fullReservation);
         }
 
-
-        public List<BookingModel> GetReservations()
+        private List<BookingModel> GetReservations()
         {
-            return HttpContext.Session.GetObjectFromJson<List<BookingModel>>("UserBookings");
+            return BookingModelFactory.Instance.GetSessionReservations(HttpContext.Session);
         }
     }
 }

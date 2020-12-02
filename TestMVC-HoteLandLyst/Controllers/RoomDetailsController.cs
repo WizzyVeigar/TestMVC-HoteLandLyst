@@ -27,7 +27,8 @@ namespace TestMVC_HoteLandLyst.Controllers
                 return NotFound();
             }
 
-            BookingModel bookingModel = BookingModelFactory.Instance.CreateSingle();
+            //Using singleton here, perhaps consider injecting an interface, like below.
+            BookingModel bookingModel = BookingModelFactory.Instance.CreateBookingModel();
 
             try
             {
@@ -40,13 +41,8 @@ namespace TestMVC_HoteLandLyst.Controllers
             }
             catch (Exception e)
             {
-                //Room could not be found in instance.rooms
-         
                 throw e;
             }
-
-            //How To do this properly?
-
         }
 
         /// <summary>
@@ -56,26 +52,55 @@ namespace TestMVC_HoteLandLyst.Controllers
         [HttpPost]
         public IActionResult AddToBooking(BookingModel currentRoom)
         {
+            //There is a chance the user can have messed with the cookie....
             string roomNumber = HttpContext.Request.Cookies["currentRoom"];
+            try
+            {
+                currentRoom.Room = ((RoomFactory)createMultiple).GetSingle(int.Parse(roomNumber));
+                CheckValidEndDate(currentRoom);
+                AddRoomToSession(currentRoom);
 
-            currentRoom.Room = ((RoomFactory)createMultiple).GetSingle(int.Parse(roomNumber));
-            //Temporary addition of hours
-            currentRoom.StartDate.AddHours(10);
+                return RedirectToAction("Index", "Rooms");
+            }
+            catch (InvalidCastException e)
+            {
+                throw e;
+            }
+
+        }
+
+        /// <summary>
+        /// Adds the booking model to the session with UserBookings as key
+        /// </summary>
+        /// <param name="booking"></param>
+        private void AddRoomToSession(BookingModel booking)
+        {
+            List<BookingModel> bookingModels;
 
             if (HttpContext.Session.Keys.Any(key => key == "UserBookings"))
             {
-                List<BookingModel> reservations = HttpContext.Session.GetObjectFromJson<List<BookingModel>>("UserBookings");
-                reservations.Add(currentRoom);
+                bookingModels = HttpContext.Session.GetObjectFromJson<List<BookingModel>>("UserBookings");
             }
             else
             {
-                List<BookingModel> bookingModels = new List<BookingModel>();
-                bookingModels.Add(currentRoom);
-                //new List<BookingModel>() { bookingModels }
-                HttpContext.Session.SetObjectAsJson("UserBookings", bookingModels);
+                //Maybe make somewhere else
+                bookingModels = new List<BookingModel>();
             }
 
-            return RedirectToAction("Index", "Rooms");
+            bookingModels.Add(booking);
+            HttpContext.Session.SetObjectAsJson("UserBookings", booking);
+        }
+
+        /// <summary>
+        /// Checks the EndDate for <paramref name="booking"/> and sets it if needed
+        /// </summary>
+        /// <param name="booking">The room which you want to check the end date</param>
+        private void CheckValidEndDate(BookingModel booking)
+        {
+            if (booking.EndDate.Hour >= 10 && booking.EndDate.Minute > 0)
+            {
+                booking.EndDate = new DateTime(booking.EndDate.Year, booking.EndDate.Month, booking.EndDate.Day, 10, 0, booking.EndDate.Second);
+            }
         }
     }
 }

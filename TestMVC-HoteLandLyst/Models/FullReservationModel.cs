@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,12 @@ namespace TestMVC_HoteLandLyst.Models
     //Final model stored in session for finalizing bookings
     public class FullReservationModel
     {
+        [JsonConstructor]
+        public FullReservationModel(List<BookingModel> bookingModels)
+        {
+            RoomsToBook = bookingModels;
+        }
+
         /// <summary>
         /// List of rooms customer wants booked
         /// </summary>

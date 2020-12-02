@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+using TestMVC_HoteLandLyst.Extensions;
 using TestMVC_HoteLandLyst.Models;
 
 namespace TestMVC_HoteLandLyst.Factories
@@ -22,9 +20,20 @@ namespace TestMVC_HoteLandLyst.Factories
             }
         }
 
-        public BookingModel CreateSingle()
+        public BookingModel CreateBookingModel()
         {
             return new BookingModel();
+        }
+        public List<BookingModel> GetSessionReservations(ISession currentSession)
+        {
+            List<BookingModel> bookingModels = currentSession.GetObjectFromJson<List<BookingModel>>("UserBookings");
+            if (bookingModels == null || bookingModels.Count == 0)
+            {
+                return null;
+            }
+
+            return bookingModels;
+            
         }
     }
 }

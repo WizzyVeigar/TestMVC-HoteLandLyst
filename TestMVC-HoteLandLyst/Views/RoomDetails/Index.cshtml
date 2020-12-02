@@ -21,12 +21,10 @@
            {
                htmlAttributes = new
                {
-                   @type = "date",
+                   @type = "datetime-local",
                    @class = "form-control",
-                   value = "",
-                   pattern = @"\d{2}-\d{2}-\d{4}",
-                   min = "01-01-2020",
-                   max = "12-31-2030",
+                   min = "01-01-2020 10:00:00",
+                   max = "12-31-2030 14:00:00",
                    id = "startDate",
                    required = "required"
                }
@@ -42,12 +40,10 @@
            {
                htmlAttributes = new
                {
-                   @type = "date",
+                   @type = "datetime-local",
                    @class = "form-control",
-                   value = "",
-                   pattern = @"\d{2}-\d{2}-\d{4}",
-                   min = "01-01-2020",
-                   max = "12-31-2030",
+                   min = "01-01-2020 10:00:00",
+                   max = "12-31-2030 14:00:00",
                    id = "endDate",
                    required = "required"
                }
@@ -69,5 +65,4 @@
     @*</form>*@
 }
 
-<script src="~/js/PriceChanger.js"></script>
 <script type="text/javascript" src="~/js/ValidationSubmit.js"></script>

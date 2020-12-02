@@ -32,13 +32,28 @@ function CheckDate() {
 };
 
 
+Number.prototype.AddZero = function (b, c) {
+    var l = (String(b || 10).length - String(this).length) + 1;
+    return l > 0 ? new Array(l).join(c || '0') + this : this;
+}//to add zero to less than 10,
+
+
+var d = new Date(),
+    localDateTime = [(d.getMonth() + 1).AddZero(),
+    d.getDate().AddZero(),
+    d.getFullYear()].join('/') + ', ' +
+        [d.getHours().AddZero(),
+        d.getMinutes().AddZero()].join(':');
+var elemStart = document.getElementById("startDate");
+var elemEnd = document.getElementById("endDate");
+elemStart.value = localDateTime;
+elemEnd.value = localDateTime;
+
+
 var originalPrice = parseFloat(document.getElementById("RoomPrice").innerHTML);
-document.getElementById("endDate").onchange =
+document.getElementById("endDate").onchange = ValidatePrice;
 
-
-
-    function ValidatePrice() {
-
+function ValidatePrice() {
     CheckDate();
     let _startDate = new Date(document.getElementById("startDate").value);
     let _endDate = new Date(document.getElementById("endDate").value);
