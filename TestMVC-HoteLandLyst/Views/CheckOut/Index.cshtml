@@ -4,12 +4,13 @@
     ViewData["Title"] = "CheckOut";
 }
 
-<h1>CheckOut</h1>
+<h1>Room CheckOut</h1>
 
 @{
-    if (Model.RoomsToBook == null)
+    if (Model.RoomsToBook == null || Model.RoomsToBook.Count == 0)
     {
         <h3>There seems to be no rooms reserved yet...</h3>
+        <h4><a asp-action="Index" asp-controller="Rooms" class="btn btn-success">Click here to browse our rooms</a></h4>
     }
     else
     {
