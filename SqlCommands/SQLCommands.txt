@@ -3,7 +3,7 @@ HotelLandLyst SQL
 
 use HotelLandLyst;
 
-drop table if exists Reservation, Customer, City, RoomAccessoryList, Room, RoomStatus, RoomAccessory
+drop table if exists Reservation, FinishedReservationLog, Customer, City, RoomAccessoryList, Room, RoomStatus, RoomAccessory
 
 create table RoomAccessory(
 RaId int primary key identity(1,1),
@@ -56,14 +56,25 @@ foreign key(RoomNumber) references Room(RoomNumber),
 foreign key(customerPhone) references Customer(customerPhone)
 );
 
+create table FinishedReservationLog(
+DeletionDate DateTime not null,
+RoomNumber int not null,
+customerPhone varchar(20) not null,
+ReservationPrice decimal(18,2) not null,
+StartDate DateTime not null,
+EndDate DateTime not null,
+foreign key(RoomNumber) references Room(RoomNumber),
+foreign key(customerPhone) references Customer(customerPhone)
+)
 
 
 
+create procedure GetRoomById @id int
+as
 
-
-
-
-
+select * 
+from Room
+where RoomNumber = @id
 
 create procedure GetRoomTotalPrice @RoomId int
 as
@@ -106,3 +117,33 @@ AS
 insert into Customer(customerFName, customerLName, customerAddress, CityAreaCode, customerEmail, customerPhone)
 values
 (@customerFName, @customerLName, @customerAddress, @customerAreaCode, @customerEmail, @customerPhone)
+
+
+create procedure GetRoomAccessories 
+as
+
+select Room.RoomNumber, AccName, ExtraCharge
+from Room
+left join RoomAccessoryList on RoomAccessoryList.RoomNumber = Room.RoomNumber
+left join RoomAccessory on RoomAccessory.RaId = RoomAccessoryList.RAId
+
+
+create procedure GetCustomer @customerPhone varchar(20)
+as
+select * FROM Customer WHERE customerPhone=@customerPhone
+
+create procedure GetAllRooms
+as
+select * from Room
+
+
+Create procedure GetRoomAccessoriesById @Id int
+as
+select RoomAccessory.AccName, RoomAccessory.ExtraCharge
+from RoomAccessory
+inner join RoomAccessoryList
+on 
+RoomAccessory.RaId = RoomAccessoryList.RAId
+inner join Room
+on Room.RoomNumber = RoomAccessoryList.RoomNumber
+where Room.RoomNumber = @Id;
