@@ -4,20 +4,22 @@
 }
 
 <h2>My Rooms list</h2>
-@{
-    foreach (var room in Model)
-    {
-        <div class="col-md-6">
-            <div>
-                <h1><a asp-controller="RoomDetails" asp-action="Index" asp-route-id="@room.RoomNumber">@room.RoomNumber</a></h1>
-                @foreach (RoomAccessoryModel item in room.RoomAccessories)
-                {
-                    <p>@item.AccessoryName</p>
-                }
+<div class="row">
+        @{
+            foreach (var room in Model)
+            {
+                <div class="card col-sm-5">
+                    <img class="card-img-top" src="..." alt="Funny picture" />
+                    <div class="card-body">
+                        <h3 class="card-title">@room.RoomNumber</h3>
+                        @foreach (RoomAccessoryModel item in room.RoomAccessories)
+                        {
+                            <p class="card-text">@item.AccessoryName</p>
+                        }
 
-            </div>
-        </div>
-    }
-}
-
-<p>Hello from our View Template!</p>
+                    </div>
+                    <a asp-controller="RoomDetails" asp-action="Index" asp-route-id="@room.RoomNumber" class="btn btn-primary">Go Here</a>
+                </div>
+            }
+        }
+</div>

@@ -88,7 +88,7 @@ namespace TestMVC_HoteLandLyst.Controllers
             }
 
             bookingModels.Add(booking);
-            HttpContext.Session.SetObjectAsJson("UserBookings", booking);
+            HttpContext.Session.SetObjectAsJson("UserBookings", bookingModels);
         }
 
         /// <summary>

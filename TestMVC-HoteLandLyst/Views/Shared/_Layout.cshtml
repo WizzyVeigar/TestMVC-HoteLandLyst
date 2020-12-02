@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - Hotel LandLyst - App</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/Styles.css" />
 </head>
 <body>
     <header>
@@ -33,9 +34,11 @@
         </nav>
     </header>
     <div class="container">
+        <aside></aside>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+        <aside></aside>
     </div>
 
     <footer class="border-top footer text-muted">

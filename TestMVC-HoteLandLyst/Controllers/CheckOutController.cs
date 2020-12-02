@@ -29,14 +29,7 @@ namespace TestMVC_HoteLandLyst.Controllers
             {
                 //Make in factory
                 fullReservation = new FullReservationModel(GetReservations());
-                if (fullReservation.RoomsToBook != null)
-                {
-                    return View(fullReservation);
-                }
-                else
-                {
-                    throw new ArgumentNullException();
-                }
+                return View(fullReservation);
             }
             catch (Exception e)
             {
