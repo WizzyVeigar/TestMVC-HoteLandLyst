@@ -56,8 +56,8 @@
                 <div class="form-row">
                     <div class="col">
 
-                        <label class="col-form-label" for="phoneNum">Phone Number:</label><br>
-                        <input class="form-control" type="number" id="phoneNum" name="phoneNum" required asp-for="Customer.PhoneNumber">
+                        <label class="col-form-label" for="phoneNumber">Phone Number:</label><br>
+                        <input class="form-control" type="tel" id="phoneNumber" maxlength="20" name="phoneNumber" required asp-for="Customer.PhoneNumber">
                         <div class="invalid-feedback">
                             Please write your phone number.
                         </div>
@@ -73,10 +73,10 @@
                 <div class="form-row">
                     <div class="col">
 
-                        <label class="col-form-label" for="areaCode" >City Area Code:</label><br>
-                        <input class="form-control" type="number" id="areaCode" name="areaCode" required asp-for="Customer.CityAreaCode">
+                        <label class="col-form-label" for="cityAreaCode" >City Area Code:</label><br>
+                        <input class="form-control" type="text" maxlength="4" min="4" id="areaCode" name="cityAreaCode" required asp-for="Customer.CityAreaCode">
                         <div class="invalid-feedback">
-                            Please write your phone number.
+                            Please write your City's area code.
                         </div>
                     </div>
                     <div class="col">

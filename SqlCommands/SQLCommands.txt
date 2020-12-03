@@ -94,7 +94,7 @@ create procedure MakeReservation
 @EndDate DateTime
 as
 
-declare @dayAmount int = (Select DATEDIFF(day, @startdate, @enddate))
+declare @dayAmount int = (Select DATEDIFF(day, @StartDate, @EndDate))
 declare @TotalAmount int  exec GetRoomTotalPrice @RoomId = @RoomNumber
 
 insert into Reservation(customerPhone, RoomNumber, StartDate, EndDate, ReservationPrice)

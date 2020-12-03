@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.Models;
 using Microsoft.Extensions.Configuration;
 using TestMVC_HoteLandLyst.Interfaces;
+using System.Text.Json;
 
 namespace TestMVC_HoteLandLyst.DalClasses
 {
@@ -34,17 +35,21 @@ namespace TestMVC_HoteLandLyst.DalClasses
                 SqlConnection conn;
                 using (conn = GetSqlConnection())
                 {
+                    conn.ConnectionString = connectionstring;
                     SqlCommand command = GetSqlCommand();
+                    command.Connection = conn;
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.CommandText = "MakeReservation @RoomNumber, @customerPhone, @StartDate, @EndDate";
-                    command.Parameters.AddWithValue("@customerPhone", reservationModel.Customer.PhoneNumber);
+                    command.CommandText = "MakeReservation";
 
                     foreach (BookingModel booking in reservationModel.RoomsToBook)
                     {
                         command.Parameters.AddWithValue("@RoomNumber", booking.Room.RoomNumber);
+                        command.Parameters.AddWithValue("@customerPhone", reservationModel.Customer.PhoneNumber);
                         command.Parameters.AddWithValue("@StartDate", booking.StartDate);
                         command.Parameters.AddWithValue("@EndDate", booking.EndDate);
+
+                        command.Parameters.Clear();
 
                         try
                         {
@@ -53,6 +58,58 @@ namespace TestMVC_HoteLandLyst.DalClasses
                         }
                         catch (SqlException ex)
                         {
+                            throw ex;
+                            //Log exception
+                            //throw;
+                        }
+                        finally
+                        {
+                            conn.Close();
+                        }
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [HttpPost]
+        internal void MakeReservation(string reservationModel)
+        {
+            FullReservationModel json = JsonSerializer.Deserialize<FullReservationModel>(reservationModel);
+            try
+            {
+                SqlConnection conn;
+                using (conn = GetSqlConnection())
+                {
+                    conn.ConnectionString = connectionstring;
+                    SqlCommand command = GetSqlCommand();
+                    command.Connection = conn;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "MakeReservation";
+
+                    foreach (BookingModel booking in json.RoomsToBook)
+                    {
+                        command.Parameters.AddWithValue("@RoomNumber", booking.Room.RoomNumber);
+                        command.Parameters.AddWithValue("@customerPhone", json.Customer.PhoneNumber);
+                        command.Parameters.AddWithValue("@StartDate", booking.StartDate);
+                        command.Parameters.AddWithValue("@EndDate", booking.EndDate);
+
+                        command.Parameters.Clear();
+
+                        try
+                        {
+                            conn.Open();
+                            command.ExecuteNonQuery();
+                        }
+                        catch (SqlException ex)
+                        {
+                            throw ex;
                             //Log exception
                             //throw;
                         }
@@ -80,8 +137,11 @@ namespace TestMVC_HoteLandLyst.DalClasses
                 SqlConnection conn;
                 using (conn = GetSqlConnection())
                 {
+                    conn.ConnectionString = connectionstring;
                     SqlCommand command = GetSqlCommand();
+                    command.Connection = conn;
                     command.CommandType = CommandType.StoredProcedure;
+
                     DataTable dt = GetDataTable();
                     SqlDataAdapter adapter = GetAdapter();
                     SqlDataReader dataReader;
@@ -180,7 +240,7 @@ namespace TestMVC_HoteLandLyst.DalClasses
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandText = query;
                     command.Connection = conn;
-                    command.Parameters.AddWithValue("@Id",paramId);
+                    command.Parameters.AddWithValue("@Id", paramId);
                     DataTable dt = GetDataTable();
                     SqlDataAdapter dataAdapter = GetAdapter();
                     SqlDataReader dataReader;

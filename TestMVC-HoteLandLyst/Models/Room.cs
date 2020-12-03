@@ -27,7 +27,7 @@ namespace TestMVC_HoteLandLyst.Models
         }
 
         [JsonConstructor]
-        public Room(int roomNumber,decimal price, List<RoomAccessoryModel> roomAccessoryModels) : this(roomNumber, price)
+        public Room(int roomNumber, decimal price, List<RoomAccessoryModel> roomAccessoryModels) : this(roomNumber, price)
         {
             RoomAccessories = roomAccessoryModels;
         }

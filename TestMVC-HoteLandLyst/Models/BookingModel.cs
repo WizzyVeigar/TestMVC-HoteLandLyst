@@ -13,7 +13,6 @@ namespace TestMVC_HoteLandLyst.Models
         public Room Room { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        [DisplayName()]
         public decimal ReservationPrice { get; set; }
     }
 }

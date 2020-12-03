@@ -23,10 +23,11 @@ namespace TestMVC_HoteLandLyst.Factories
         }
 
 
-        public FullReservationModel CreateSingle()
-        {
-            return new FullReservationModel();
-        }
+        //public FullReservationModel CreateSingle()
+        //{
+        //    return new FullReservationModel();
+        //}
+
         public FullReservationModel CreateSingle(List<BookingModel> models)
         {
             return new FullReservationModel(models);
