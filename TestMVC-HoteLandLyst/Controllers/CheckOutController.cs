@@ -28,7 +28,7 @@ namespace TestMVC_HoteLandLyst.Controllers
             try
             {
                 //Make in factory
-                fullReservation = new FullReservationModel(GetReservations());
+                fullReservation = FullReservationFactory.Instance.CreateSingle(GetReservations());
                 return View(fullReservation);
             }
             catch (Exception e)
@@ -40,8 +40,7 @@ namespace TestMVC_HoteLandLyst.Controllers
 
         public void MakeReservation(Customer customerValues)
         {
-            //Problematic singleton?
-            fullReservation.RoomsToBook = GetReservations();
+            fullReservation = FullReservationFactory.Instance.CreateSingle(GetReservations());
             if (fullReservation.RoomsToBook == null)
             {
                 throw new ArgumentNullException();

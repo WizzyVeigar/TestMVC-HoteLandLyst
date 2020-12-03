@@ -58,6 +58,7 @@ namespace TestMVC_HoteLandLyst.Controllers
             {
                 currentRoom.Room = ((RoomFactory)createMultiple).GetSingle(int.Parse(roomNumber));
                 CheckValidEndDate(currentRoom);
+                CheckDiscount(currentRoom);
                 AddRoomToSession(currentRoom);
 
                 return RedirectToAction("Index", "Rooms");
@@ -70,9 +71,23 @@ namespace TestMVC_HoteLandLyst.Controllers
         }
 
         /// <summary>
+        /// Reduces the price if the days stayed is at/over 7 days
+        /// </summary>
+        /// <param name="currentRoom">the room currently being booked</param>
+        private void CheckDiscount(BookingModel currentRoom)
+        {
+            if ((currentRoom.EndDate - currentRoom.StartDate).TotalDays >= 7)
+            {
+                decimal price = decimal.Parse(currentRoom.Room.ToString());
+                price *= (decimal)0.9;
+                currentRoom.ReservationPrice = price;
+            }
+        }
+
+        /// <summary>
         /// Adds the booking model to the session with UserBookings as key
         /// </summary>
-        /// <param name="booking"></param>
+        /// <param name="booking">The current booking you want to add to the "UserBookings" session</param>
         private void AddRoomToSession(BookingModel booking)
         {
             List<BookingModel> bookingModels;

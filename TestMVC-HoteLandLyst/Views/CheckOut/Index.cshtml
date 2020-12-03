@@ -33,8 +33,6 @@
                 }
             }
         </ul>
-        @Html.ActionLink("Submit Bookings", "MakeReservation", "CheckOut")
-
         <form class="needs-validation" novalidate asp-action="MakeReservation" asp-controller="CheckOut">
             <div class="form-group">
                 <div class="form-row">
@@ -48,7 +46,7 @@
                     </div>
                     <div class="col">
 
-                        <label class="col-form-label" for="lname" asp-for="Customer.LName">Last name:</label><br>
+                        <label class="col-form-label" for="lname">Last name:</label><br>
                         <input class="form-control" type="text" id="lname" name="lname" placeholder="Last Name" required asp-for="Customer.LName">
                         <div class="invalid-feedback">
                             Please write your last name.
@@ -58,14 +56,31 @@
                 <div class="form-row">
                     <div class="col">
 
-                        <label class="col-form-label" for="phoneNum" asp-for="Customer.PhoneNumber">Phone Number:</label><br>
-                        <input class="form-control" type="text" id="phoneNum" name="phoneNum" required asp-for="Customer.PhoneNumber">
+                        <label class="col-form-label" for="phoneNum">Phone Number:</label><br>
+                        <input class="form-control" type="number" id="phoneNum" name="phoneNum" required asp-for="Customer.PhoneNumber">
                         <div class="invalid-feedback">
                             Please write your phone number.
                         </div>
                     </div>
                     <div class="col">
-                        <label class="col-form-label" for="address" asp-for="Customer.Address">Address:</label><br>
+                        <label class="col-form-label" for="email">Email:</label><br>
+                        <input class="form-control" type="text" id="email" name="email" required asp-for="Customer.Email">
+                        <div class="invalid-feedback">
+                            Please write your full email.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+
+                        <label class="col-form-label" for="areaCode" >City Area Code:</label><br>
+                        <input class="form-control" type="number" id="areaCode" name="areaCode" required asp-for="Customer.CityAreaCode">
+                        <div class="invalid-feedback">
+                            Please write your phone number.
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label class="col-form-label" for="address">Address:</label><br>
                         <input class="form-control" type="text" id="address" name="address" required asp-for="Customer.Address">
                         <div class="invalid-feedback">
                             Please write your full address.
@@ -73,6 +88,7 @@
                     </div>
                 </div>
             </div>
+            <button type="submit" class="btn btn-primary">Make Reservation</button>
         </form>
     }
 }

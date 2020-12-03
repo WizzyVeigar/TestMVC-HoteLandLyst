@@ -3,15 +3,13 @@
     ViewData["Title"] = "Room" + Model.Room.RoomNumber + "Details";
 }
 
-<h1>
-    Welcome to room @{Html.DisplayFor(model => model.Room.RoomNumber);}!
-</h1>
+<h1> Welcome to room @{Html.DisplayFor(model => model.Room.RoomNumber);}!</h1>
 @*<h4>This room costs @Model.Room.ToString() kr. daily</h4>*@
-@Html.LabelForModel("This room costs " + Model.Room.ToString() + " kr. daily", new { id = "RoomPrice" })
 @*<label>This room costs @Html.LabelForModel(Model.Room.ToString(), new { id = "RoomPrice" }) kr. daily</label>*@
 
 @using (Html.BeginForm("AddToBooking", "RoomDetails", FormMethod.Post, new { @class = "needs-validation" }))
 {
+    @Html.LabelFor(model => Model.ReservationPrice, Model.Room.ToString(), new { id = "RoomPrice" })
     @*<form class="needs-validation" novalidate>*@
     <div class="form-group">
         <div class="form-row">
@@ -65,4 +63,4 @@
     @*</form>*@
 }
 
-<script type="text/javascript" src="~/js/ValidationSubmit.js"></script>
+<script src="~/js/Dates.js"></script>

@@ -10,6 +10,10 @@ namespace TestMVC_HoteLandLyst.Models
     //Final model stored in session for finalizing bookings
     public class FullReservationModel
     {
+        public FullReservationModel()
+        {
+        }
+
         [JsonConstructor]
         public FullReservationModel(List<BookingModel> bookingModels)
         {
