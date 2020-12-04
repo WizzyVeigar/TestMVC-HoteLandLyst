@@ -12,7 +12,7 @@
 @*<h4>This room costs @Model.Room.ToString() kr. daily</h4>*@
 @*<label>This room costs @Html.LabelForModel(Model.Room.ToString(), new { id = "RoomPrice" }) kr. daily</label>*@
 
-@Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepicker", id ="datepicker" } })
+@*@Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepicker", id = "datepicker" } })*@
 
 @using (Html.BeginForm("AddToBooking", "RoomDetails", FormMethod.Post, new { @class = "needs-validation" }))
 {
@@ -21,42 +21,64 @@
     <div class="form-group">
         <div class="form-row">
             <div class="col">
-                <label class="label col-form-label">Start date:</label><br>
-                @*@Html.EditorFor(model => model.StartDate, new
-                    {
-                        htmlAttributes = new
-                        {
-                            @type = "text",
-                            //@class = "form-control",
-                            //min = DateTime.Now.ToUniversalTime().ToString().Replace("/",":"),
-                            //max = "12-31-2030 14:00:00",
-                            id = "startDatePicker",
-                            required = "required"
-                        }
-                    })
-                         <div class="invalid-feedback">
-                             Please insert a valid date.
-                         </div>*@
-            </div>
-
-            <div class="col">
-                <label class="label col-form-label">End date:</label><br>
-                @Html.EditorFor(model => model.EndDate, new
-           {
-               htmlAttributes = new
-               {
-                   @type = "datetime-local",
-                   @class = "form-control",
-                   min = "01-01-2020 10:00:00",
-                   max = "12-31-2030 14:00:00",
-                   id = "endDate",
-                   required = "required"
-               }
-           })
+                <label asp-for="StartDate" class="control-label"></label>
+                <div class='input-group date' id='startdate'>
+                    <input asp-for="StartDate" type="text" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")" required />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
                 <div class="invalid-feedback">
                     Please insert a valid date.
                 </div>
             </div>
+            <div class="col">
+                <label asp-for="EndDate" class="control-label"></label>
+                <div class='input-group date' id='enddate'>
+                    <input asp-for="EndDate" type="text" class="form-control" value="@DateTime.Now.AddMinutes(3).ToString("yyyy-MM-ddThh:mm")" required />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <div class="invalid-feedback">
+                    Please insert a valid date.
+                </div>
+            </div>
+            @*<div class="col">*@
+            @*@Html.EditorFor(model => model.StartDate, new
+                {
+                    htmlAttributes = new
+                    {
+                        @type = "text",
+                        //@class = "form-control",
+                        //min = DateTime.Now.ToUniversalTime().ToString().Replace("/",":"),
+                        //max = "12-31-2030 14:00:00",
+                        id = "startDatePicker",
+                        required = "required"
+                    }
+                })
+                     <div class="invalid-feedback">
+                         Please insert a valid date.
+                     </div>*@
+            @*</div>*@
+            @*<div class="col">
+                     <label class="label col-form-label">End date:</label><br>
+                     @Html.EditorFor(model => model.EndDate, new
+                {
+                    htmlAttributes = new
+                    {
+                        @type = "datetime-local",
+                        @class = "form-control",
+                        min = "01-01-2020 10:00:00",
+                        max = "12-31-2030 14:00:00",
+                        id = "endDate",
+                        required = "required"
+                    }
+                })
+                     <div class="invalid-feedback">
+                         Please insert a valid date.
+                     </div>
+                 </div>*@
         </div>
     </div>
     <div class="form-group">
@@ -70,15 +92,37 @@
     @*</form>*@
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
-<script src="~/js/Dates.js"></script>
+@section Scripts
+    {
+    <script type="text/javascript" src="~/js/Dates.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+    <script>
+        $(function () {
+            $('#startdate').datetimepicker({
+                //onSelect: ValidatePrice()
+            });
+            $('#enddate').datetimepicker();
+        });
 
+        var runOnce = false;
+        $("#enddate").on("dp.change", function () {
+            
+            let startDate = document.getElementById("StartDate").value;
+            let endDate = document.getElementById("EndDate").value;
 
-<script>
-    $(document).ready(function () {
-        alert('hello');
-    });
-    //$(function () {
-    //    $("#datepicker").datepicker();
-    //});
-</script>
+            if ((Date.parse(endDate) <= Date.parse(startDate)) && runOnce === true) {
+                alert("End date should be greater than Start date");
+                document.getElementById("EndDate").value = "";
+            }
+            if (runOnce === false) {
+                runOnce = true;
+            }
+        });
+
+    </script>
+}
