@@ -4,11 +4,15 @@
 }
 
 
+
+
+
+
 <h1> Welcome to room @{Html.DisplayFor(model => model.Room.RoomNumber);}!</h1>
 @*<h4>This room costs @Model.Room.ToString() kr. daily</h4>*@
 @*<label>This room costs @Html.LabelForModel(Model.Room.ToString(), new { id = "RoomPrice" }) kr. daily</label>*@
 
-<input type="text" id="datepicker">
+@Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepicker", id ="datepicker" } })
 
 @using (Html.BeginForm("AddToBooking", "RoomDetails", FormMethod.Post, new { @class = "needs-validation" }))
 {
@@ -66,5 +70,15 @@
     @*</form>*@
 }
 
-
+<script src="~/lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
 <script src="~/js/Dates.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        alert('hello');
+    });
+    //$(function () {
+    //    $("#datepicker").datepicker();
+    //});
+</script>
