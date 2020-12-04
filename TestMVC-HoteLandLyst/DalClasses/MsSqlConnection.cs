@@ -49,12 +49,13 @@ namespace TestMVC_HoteLandLyst.DalClasses
                         command.Parameters.AddWithValue("@StartDate", booking.StartDate);
                         command.Parameters.AddWithValue("@EndDate", booking.EndDate);
 
-                        command.Parameters.Clear();
 
                         try
                         {
                             conn.Open();
                             command.ExecuteNonQuery();
+
+                            command.Parameters.Clear();
                         }
                         catch (SqlException ex)
                         {
@@ -76,11 +77,12 @@ namespace TestMVC_HoteLandLyst.DalClasses
                 throw;
             }
         }
-
-        [HttpPost]
-        internal void MakeReservation(string reservationModel)
+        /// <summary>
+        /// Method for creating a customer in the database
+        /// </summary>
+        /// <param name="customer">The customer to be created</param>
+        internal void CreateCustomer(Customer customer)
         {
-            FullReservationModel json = JsonSerializer.Deserialize<FullReservationModel>(reservationModel);
             try
             {
                 SqlConnection conn;
@@ -91,43 +93,37 @@ namespace TestMVC_HoteLandLyst.DalClasses
                     command.Connection = conn;
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.CommandText = "MakeReservation";
+                    command.CommandText = "MakeCustomer";
+                    command.Parameters.AddWithValue("@customerFName", customer.FName);
+                    command.Parameters.AddWithValue("@customerLName", customer.LName);
+                    command.Parameters.AddWithValue("@customerAddress", customer.Address);
+                    command.Parameters.AddWithValue("@customerPhone", customer.PhoneNumber);
+                    command.Parameters.AddWithValue("@customerEmail", customer.Email);
+                    command.Parameters.AddWithValue("@customerAreaCode", customer.CityAreaCode);
 
-                    foreach (BookingModel booking in json.RoomsToBook)
+
+                    try
                     {
-                        command.Parameters.AddWithValue("@RoomNumber", booking.Room.RoomNumber);
-                        command.Parameters.AddWithValue("@customerPhone", json.Customer.PhoneNumber);
-                        command.Parameters.AddWithValue("@StartDate", booking.StartDate);
-                        command.Parameters.AddWithValue("@EndDate", booking.EndDate);
-
-                        command.Parameters.Clear();
-
-                        try
-                        {
-                            conn.Open();
-                            command.ExecuteNonQuery();
-                        }
-                        catch (SqlException ex)
-                        {
-                            throw ex;
-                            //Log exception
-                            //throw;
-                        }
-                        finally
-                        {
-                            conn.Close();
-                        }
+                        conn.Open();
+                        command.ExecuteNonQuery();
                     }
-
+                    catch (SqlException ex)
+                    {
+                        throw ex;
+                        //Log exception
+                        //throw;
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                throw e;
             }
         }
-
         //This is way too much like the other method, how fix?
         public DataRow GetCustomer(string phoneNumber)
         {
@@ -171,10 +167,61 @@ namespace TestMVC_HoteLandLyst.DalClasses
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 //Outer exception
-                throw;
+                throw e;
+            }
+        }
+
+        public bool FindCustomer(string phoneNumber)
+        {
+            try
+            {
+
+                SqlConnection conn;
+                using (conn = GetSqlConnection())
+                {
+                    conn.ConnectionString = connectionstring;
+                    SqlCommand command = GetSqlCommand();
+                    command.Connection = conn;
+                    command.CommandType = CommandType.StoredProcedure;
+
+
+                    SqlDataReader dataReader;
+
+                    using (command = new SqlCommand("Exec GetCustomer @customerPhone", conn))
+                    {
+                        command.Parameters.AddWithValue("@customerPhone", phoneNumber);
+                        try
+                        {
+                            conn.Open();
+                            dataReader = command.ExecuteReader();
+                            if (dataReader.HasRows)
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        catch (SqlException se)
+                        {
+                            //Connection failed to open
+                            //Inner exception 1
+                            throw se;
+                        }
+                        finally
+                        {
+                            conn.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
 
@@ -209,10 +256,9 @@ namespace TestMVC_HoteLandLyst.DalClasses
                         adapter.Fill(dt);
 
                     }
-                    catch (SqlException)
+                    catch (SqlException ex)
                     {
-
-                        throw;
+                        throw ex;
                     }
                     finally
                     {
@@ -222,10 +268,9 @@ namespace TestMVC_HoteLandLyst.DalClasses
                     return dt;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                throw e;
             }
         }
         public DataTable ExecuteSPParam(string query, int paramId)
@@ -258,7 +303,6 @@ namespace TestMVC_HoteLandLyst.DalClasses
                     }
                     catch (SqlException e)
                     {
-
                         throw e;
                     }
                     finally
@@ -270,7 +314,6 @@ namespace TestMVC_HoteLandLyst.DalClasses
             }
             catch (Exception e)
             {
-
                 throw e;
             }
         }

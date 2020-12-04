@@ -21,9 +21,9 @@
                 {
                     foreach (BookingModel room in Model.RoomsToBook)
                     {
-                        <li class="list-group-item">@room.Room.RoomNumber</li>
-                        <li class="list-group-item">@room.StartDate</li>
-                        <li class="list-group-item">@room.EndDate</li>
+                        <li class="list-group-item list-group-flush" >@room.Room.RoomNumber</li>
+                        <li class="list-group-item list-group-flush">@room.StartDate</li>
+                        <li class="list-group-item list-group-flush">@room.EndDate</li>
                     }
                 }
                 catch (Exception)
@@ -57,14 +57,14 @@
                     <div class="col">
 
                         <label class="col-form-label" for="phoneNumber">Phone Number:</label><br>
-                        <input class="form-control" type="tel" id="phoneNumber" maxlength="20" name="phoneNumber" required asp-for="Customer.PhoneNumber">
+                        <input class="form-control" type="tel" id="phoneNumber" min="8" maxlength="20" name="phoneNumber" required asp-for="Customer.PhoneNumber">
                         <div class="invalid-feedback">
                             Please write your phone number.
                         </div>
                     </div>
                     <div class="col">
                         <label class="col-form-label" for="email">Email:</label><br>
-                        <input class="form-control" type="text" id="email" name="email" required asp-for="Customer.Email">
+                        <input class="form-control" type="text" id="email" name="email" min="5" required asp-for="Customer.Email">
                         <div class="invalid-feedback">
                             Please write your full email.
                         </div>
@@ -81,7 +81,7 @@
                     </div>
                     <div class="col">
                         <label class="col-form-label" for="address">Address:</label><br>
-                        <input class="form-control" type="text" id="address" name="address" required asp-for="Customer.Address">
+                        <input class="form-control" type="text" id="address" name="address" min="5" required asp-for="Customer.Address">
                         <div class="invalid-feedback">
                             Please write your full address.
                         </div>

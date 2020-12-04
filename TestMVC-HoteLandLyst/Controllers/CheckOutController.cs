@@ -39,7 +39,7 @@ namespace TestMVC_HoteLandLyst.Controllers
 
         }
 
-        public void MakeReservation(Customer customerValues)
+        public IActionResult MakeReservation(Customer customerValues)
         {
             fullReservation = FullReservationFactory.Instance.CreateSingle(GetReservations());
             if (fullReservation.RoomsToBook == null)
@@ -47,47 +47,18 @@ namespace TestMVC_HoteLandLyst.Controllers
                 throw new ArgumentNullException();
             }
             fullReservation.Customer = customerValues;
-
+            if (!((MsSqlConnection)DataAccess).FindCustomer(fullReservation.Customer.PhoneNumber))
+            {
+                ((MsSqlConnection)DataAccess).CreateCustomer(fullReservation.Customer);
+            }
             ((MsSqlConnection)DataAccess).MakeReservation(fullReservation);
+
+            return RedirectToAction("Index", "Rooms");
         }
 
         private List<BookingModel> GetReservations()
         {
             return BookingModelFactory.Instance.GetSessionReservations(HttpContext.Session);
-        }
-
-        [HttpPost]
-        public void doStuff()
-        {
-            string model = @"{
-   'RoomsToBook':[
-      {
-                'Room':{
-                    'RoomNumber':101,
-            'DayPrice':695.00,
-            'RoomAccessories':[
-               {
-                        'AccessoryName':'Eget k\u00F8kken',
-                  'ExtraCharge':350.00
-               }
-            ]
-         },
-         'StartDate':'2020-12-04T12:19:00',
-         'EndDate':'2020-12-16T10:00:00',
-         'ReservationPrice':940.500
-      }
-   ],
-   'Customer':{
-                'FName':'bo',
-      'LName':'larse',
-      'Address':'Somewhere in the between',
-      'PhoneNumber':'28199319',
-      'Email':'Somewhereinthebetween@email.hello',
-      'CityAreaCode':4130
-   }
-        }";
-            FullReservationModel thing = JsonSerializer.Deserialize<FullReservationModel>(model);
-            ((MsSqlConnection)DataAccess).MakeReservation(thing);
         }
     }
 }

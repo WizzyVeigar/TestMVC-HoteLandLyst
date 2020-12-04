@@ -3,9 +3,12 @@
     ViewData["Title"] = "Room" + Model.Room.RoomNumber + "Details";
 }
 
+
 <h1> Welcome to room @{Html.DisplayFor(model => model.Room.RoomNumber);}!</h1>
 @*<h4>This room costs @Model.Room.ToString() kr. daily</h4>*@
 @*<label>This room costs @Html.LabelForModel(Model.Room.ToString(), new { id = "RoomPrice" }) kr. daily</label>*@
+
+<input type="text" id="datepicker">
 
 @using (Html.BeginForm("AddToBooking", "RoomDetails", FormMethod.Post, new { @class = "needs-validation" }))
 {
@@ -15,21 +18,21 @@
         <div class="form-row">
             <div class="col">
                 <label class="label col-form-label">Start date:</label><br>
-                @Html.EditorFor(model => model.StartDate, new
-           {
-               htmlAttributes = new
-               {
-                   @type = "datetime-local",
-                   @class = "form-control",
-                   min = "01-01-2020 10:00:00",
-                   max = "12-31-2030 14:00:00",
-                   id = "startDate",
-                   required = "required"
-               }
-           })
-                <div class="invalid-feedback">
-                    Please insert a valid date.
-                </div>
+                @*@Html.EditorFor(model => model.StartDate, new
+                    {
+                        htmlAttributes = new
+                        {
+                            @type = "text",
+                            //@class = "form-control",
+                            //min = DateTime.Now.ToUniversalTime().ToString().Replace("/",":"),
+                            //max = "12-31-2030 14:00:00",
+                            id = "startDatePicker",
+                            required = "required"
+                        }
+                    })
+                         <div class="invalid-feedback">
+                             Please insert a valid date.
+                         </div>*@
             </div>
 
             <div class="col">
@@ -62,5 +65,6 @@
     </div>
     @*</form>*@
 }
+
 
 <script src="~/js/Dates.js"></script>

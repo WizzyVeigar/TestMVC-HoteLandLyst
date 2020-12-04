@@ -76,36 +76,48 @@ select *
 from Room
 where RoomNumber = @id
 
-create procedure GetRoomTotalPrice @RoomId int
-as
-select Sum(DayPrice) + Sum(ExtraCharge) as TotalPrice
-from Room
-inner join RoomAccessoryList
-on RoomAccessoryList.RoomNumber = Room.RoomNumber
-inner join RoomAccessory
-on RoomAccessory.RaId = RoomAccessoryList.RAId
-where Room.RoomNumber = @RoomId
-group by Room.RoomNumber;
+
+declare @startDate smalldatetime = Cast('2020-12-29 09:20:00' as smalldatetime)
+declare @endDate smalldatetime = Cast('2020-12-31 09:20:00' as smalldatetime)
+
+exec MakeReservation 101, '28199319', @startDate, @endDate
 
 
-
-create procedure MakeReservation  
+create procedure MakeReservation
 @RoomNumber int, @customerPhone varchar(20), @StartDate DateTime, 
 @EndDate DateTime
 as
 
-declare @dayAmount int = (Select DATEDIFF(day, @StartDate, @EndDate))
-declare @TotalAmount int  exec GetRoomTotalPrice @RoomId = @RoomNumber
+declare @dayAmount int = (Select DATEDIFF(day, @StartDate, @EndDate));
+declare @TotalAmount int;
+
+exec @TotalAmount = GetRoomTotalPrice @RoomNumber;
 
 insert into Reservation(customerPhone, RoomNumber, StartDate, EndDate, ReservationPrice)
 values(
-	(SELECT Customer.customerPhone from Customer where customerPhone = @customerPhone),
+	@customerPhone,
 	@RoomNumber, 
 	@StartDate,
 	@EndDate, 
 	case when @dayAmount >= 7 then @TotalAmount * 0.9
+	else @TotalAmount
 	end	
 );
+
+create procedure GetRoomTotalPrice 
+	@RoomId int
+	AS
+	begin
+		declare @TotalPrice int
+		select @TotalPrice = Sum(DayPrice) + Sum(ExtraCharge)
+		from Room
+		inner join RoomAccessoryList
+		on RoomAccessoryList.RoomNumber = Room.RoomNumber
+		inner join RoomAccessory
+		on RoomAccessory.RaId = RoomAccessoryList.RAId
+		where Room.RoomNumber = @RoomId
+		return @TotalPrice
+	end
 
 
 create procedure MakeCustomer @customerFName varchar(100), @customerLName varchar(100), 
