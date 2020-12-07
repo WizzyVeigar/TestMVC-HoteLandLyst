@@ -17,9 +17,9 @@ namespace TestMVC_HoteLandLyst.Controllers
     {
         FullReservationModel fullReservation;
 
-        private IDataAccess DataAccess { get; set; }
+        private ISqlServerAccess DataAccess { get; set; }
 
-        public CheckOutController(IDataAccess dataAccess)
+        public CheckOutController(ISqlServerAccess dataAccess)
         {
             DataAccess = dataAccess;
         }
@@ -47,11 +47,11 @@ namespace TestMVC_HoteLandLyst.Controllers
                 throw new ArgumentNullException();
             }
             fullReservation.Customer = customerValues;
-            if (!((MsSqlConnection)DataAccess).FindCustomer(fullReservation.Customer.PhoneNumber))
+            if (!((CustomerAccess)DataAccess).FindCustomer(fullReservation.Customer.PhoneNumber))
             {
-                ((MsSqlConnection)DataAccess).CreateCustomer(fullReservation.Customer);
+                ((CustomerAccess)DataAccess).CreateCustomer(fullReservation.Customer);
             }
-            ((MsSqlConnection)DataAccess).CreateReservation(fullReservation);
+            ((ReservationAccess)DataAccess).CreateReservation(fullReservation);
 
             return RedirectToAction("Index", "Rooms");
         }

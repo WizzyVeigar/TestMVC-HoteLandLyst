@@ -11,8 +11,8 @@ namespace TestMVC_HoteLandLyst.Factories
 {
     public class RoomFactory : ICreateMultiple<Room>, IGetSingle<Room>
     {
-        private IDataAccess dataAccess;
-        public RoomFactory(IDataAccess dataAccess)
+        private ISqlServerAccess dataAccess;
+        public RoomFactory(ISqlServerAccess dataAccess)
         {
             this.dataAccess = dataAccess;
             Rooms = new List<Room>();
