@@ -16,8 +16,8 @@ namespace TestMVC_HoteLandLyst.Models
             ExtraCharge = extraCharge;
         }
 
-        public string AccessoryName { get; set; }
-        public decimal ExtraCharge { get; set; }
+        public string AccessoryName { get; }
+        public decimal ExtraCharge { get; }
 
 
     }

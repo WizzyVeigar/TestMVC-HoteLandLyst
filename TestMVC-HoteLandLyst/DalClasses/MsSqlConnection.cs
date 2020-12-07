@@ -28,7 +28,7 @@ namespace TestMVC_HoteLandLyst.DalClasses
         /// <param name="reservationModel">The reservations to put into the DB</param>
         /// 
         [HttpPost]
-        internal void MakeReservation(FullReservationModel reservationModel)
+        public void CreateReservation(FullReservationModel reservationModel)
         {
             try
             {

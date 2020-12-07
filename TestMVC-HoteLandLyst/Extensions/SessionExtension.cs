@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TestMVC_HoteLandLyst.Extensions
 {
-    public static class SessionExtensions
+    public static class SessionExtension
     {
         /// <summary>
         /// Serialize object as Json string

@@ -34,7 +34,7 @@ namespace TestMVC_HoteLandLyst.Controllers
             }
             catch (Exception e)
             {
-                return View("Error", new ErrorViewModel());
+                throw e;
             }
 
         }
@@ -51,7 +51,7 @@ namespace TestMVC_HoteLandLyst.Controllers
             {
                 ((MsSqlConnection)DataAccess).CreateCustomer(fullReservation.Customer);
             }
-            ((MsSqlConnection)DataAccess).MakeReservation(fullReservation);
+            ((MsSqlConnection)DataAccess).CreateReservation(fullReservation);
 
             return RedirectToAction("Index", "Rooms");
         }

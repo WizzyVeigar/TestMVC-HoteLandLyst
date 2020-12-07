@@ -24,7 +24,7 @@ namespace TestMVC_HoteLandLyst.Controllers
         {
             try
             {
-                List<Room> rooms = (List<Room>)(createMultiple).CreateAll();
+                List<Room> rooms = (List<Room>)createMultiple.CreateAll();
 
                 return View(rooms);
             }
