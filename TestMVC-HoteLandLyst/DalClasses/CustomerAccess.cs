@@ -20,7 +20,7 @@ namespace TestMVC_HoteLandLyst.DalClasses
         /// Method for creating a customer in the database
         /// </summary>
         /// <param name="customer">The customer to be created</param>
-        internal void CreateCustomer(Customer customer)
+        public void CreateCustomer(Customer customer)
         {
             try
             {

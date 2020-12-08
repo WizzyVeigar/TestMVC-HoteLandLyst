@@ -8,16 +8,20 @@ using TestMVC_HoteLandLyst.Models;
 using TestMVC_HoteLandLyst.Extensions;
 using System.Diagnostics;
 using TestMVC_HoteLandLyst.Interfaces;
+using System.Data;
+using TestMVC_HoteLandLyst.Validators;
 
 namespace TestMVC_HoteLandLyst.Controllers
 {
     public class RoomDetailsController : Controller
     {
         private ICreateMultiple<Room> createMultiple;
+        private ISqlServerAccess sqlServer;
 
-        public RoomDetailsController(ICreateMultiple<Room> createMultiple)
+        public RoomDetailsController(ICreateMultiple<Room> createMultiple, ISqlServerAccess sqlServer)
         {
             this.createMultiple = createMultiple;
+            this.sqlServer = sqlServer;
         }
 
         public IActionResult Index(int? id)
@@ -57,8 +61,8 @@ namespace TestMVC_HoteLandLyst.Controllers
             try
             {
                 currentRoom.Room = ((RoomFactory)createMultiple).GetSingle(int.Parse(roomNumber));
-                CheckValidEndDate(currentRoom);
-                CheckDiscount(currentRoom);
+                ValidatorFactory.Instance.GetDateValidation().CheckValidEndDate(currentRoom);
+                ValidatorFactory.Instance.GetPriceValidation().CheckDiscount(currentRoom);
                 AddRoomToSession(currentRoom);
 
                 return RedirectToAction("Index", "Rooms");
@@ -70,19 +74,7 @@ namespace TestMVC_HoteLandLyst.Controllers
 
         }
 
-        /// <summary>
-        /// Reduces the price if the days stayed is at/over 7 days
-        /// </summary>
-        /// <param name="currentRoom">the room currently being booked</param>
-        private void CheckDiscount(BookingModel currentRoom)
-        {
-            if ((currentRoom.EndDate - currentRoom.StartDate).TotalDays >= 7)
-            {
-                decimal price = decimal.Parse(currentRoom.Room.ToString());
-                price *= (decimal)0.9;
-                currentRoom.ReservationPrice = price;
-            }
-        }
+
 
         /// <summary>
         /// Adds the booking model to the session with UserBookings as key
@@ -106,16 +98,10 @@ namespace TestMVC_HoteLandLyst.Controllers
             HttpContext.Session.SetObjectAsJson("UserBookings", bookingModels);
         }
 
-        /// <summary>
-        /// Checks the EndDate for <paramref name="booking"/> and sets it if needed
-        /// </summary>
-        /// <param name="booking">The room which you want to check the end date</param>
-        private void CheckValidEndDate(BookingModel booking)
+        [HttpGet]
+        public DateTime[] GetUnavailableDates(int roomNumber = 101)
         {
-            if (booking.EndDate.Hour >= 10 && booking.EndDate.Minute > 0)
-            {
-                booking.EndDate = new DateTime(booking.EndDate.Year, booking.EndDate.Month, booking.EndDate.Day, 10, 0, booking.EndDate.Second);
-            }
+            return ValidatorFactory.Instance.GetDateValidation().GetUnavailableDates(roomNumber, sqlServer);
         }
     }
 }

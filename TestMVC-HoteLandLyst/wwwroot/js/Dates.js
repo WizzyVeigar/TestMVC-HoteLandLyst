@@ -3,6 +3,7 @@
     return l > 0 ? new Array(l).join(c || '0') + this : this;
 }//to add zero to less than 10,
 
+GetUnavailableDates();
 
 var d = new Date(),
     localDateTime = [(d.getMonth() + 1).AddZero(),
@@ -51,3 +52,14 @@ function CheckDate() {
         }
     };
 };
+
+
+    function GetUnavailableDates() {
+        var url = window.location.origin + "/RoomDetails/GetUnavailableDates";
+        //var number = $('#roomNumber').val();
+        var number = 101;
+        var dates;
+        $.get(url, { roomNumber: number }, function (data) {
+            dates = data;
+        });
+    }

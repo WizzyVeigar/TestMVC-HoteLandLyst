@@ -10,6 +10,8 @@ using TestMVC_HoteLandLyst.DalClasses;
 using TestMVC_HoteLandLyst.Interfaces;
 using TestMVC_HoteLandLyst.Factories;
 using System.Text.Json;
+using TestMVC_HoteLandLyst.EmailConfirmation;
+using System.Net.Mail;
 
 namespace TestMVC_HoteLandLyst.Controllers
 {
@@ -53,12 +55,34 @@ namespace TestMVC_HoteLandLyst.Controllers
             }
             ((ReservationAccess)DataAccess).CreateReservation(fullReservation);
 
+            SendConfirmationEmail(customerValues.Email);
+
             return RedirectToAction("Index", "Rooms");
         }
 
         private List<BookingModel> GetReservations()
         {
             return BookingModelFactory.Instance.GetSessionReservations(HttpContext.Session);
+        }
+
+        //Make elsewhere
+        /// <summary>
+        /// Send conformation email to customer <paramref name="email"/>
+        /// </summary>
+        /// <param name="email"></param>
+        private void SendConfirmationEmail(string email)
+        {
+            EmailFactory factory = new EmailFactory();
+            MailAddress to = factory.GetMailAddress(email);
+            MailAddress from = factory.GetMailAddress("fromAddress");
+            SmtpClient client = factory.GetSmtpClient();
+
+            MailMessage message = factory.GetMailMessage(to, from);
+            message.Body = "Thank oyu for booking at us";
+            message.Subject = "Thanks for your purchase!";
+
+            EmailSender sender = factory.GetEmailSender(message, client, message.To.First(), message.From);
+            sender.SendEmail();
         }
     }
 }
