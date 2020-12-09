@@ -129,7 +129,7 @@
         });
 
         function doStuff(date) {
-            var string = $("startdate").datetimepicker.formatDate("dd/mm/yyyy", date)
+            var string = $("#startdate").datetimepicker.formatDate("dd-mm-yyyyThh:mm", date)
                 return [dates.indexOf(string) == -1];
         }
 
