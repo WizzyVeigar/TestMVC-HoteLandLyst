@@ -121,6 +121,8 @@
                 alert("End date should be greater than Start date");
                 document.getElementById("EndDate").value = "";
             }
+
+            //Check so the method doesn't alert on load
             if (runOnce === false) {
                 runOnce = true;
             }
