@@ -18,7 +18,8 @@
             <div class="col">
                 <label asp-for="StartDate" class="control-label"></label>
                 <div class='input-group date' id='startdate'>
-                    <input asp-for="StartDate" type="text" class="form-control" value="@DateTime.Now.ToString("dd-mm-yyyyThh:mm")" required />
+                    @*<input asp-for="StartDate" type="text" class="form-control" value="@DateTime.Now.ToString("dd-mm-yyyyThh:mm")" required />*@
+                    <input id="datetimepicker" type="text" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -91,24 +92,39 @@
     {
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="~/js/jquery-ui-timepicker-addon.js"></script>
-    <link href="~/css/jquery-ui-timepicker-addon.css" rel="stylesheet" />
 
-    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>*@
+    <script src="~/js/build/jquery.datetimepicker.full.js"></script>
+    <link href="~/css/jquery.datetimepicker.css" rel="stylesheet" />
 
-    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">*@
-    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">*@
     <script>
-        var ultraNumber = @Model.Room.RoomNumber;
-        var dates = GetUnavailableDates();
 
-        $(function () {
-            $('#startdate').datetimepicker({
-                beforeShowDay: doStuff
-            });
-            $('#enddate').datetimepicker();
+        var ultraNumber = @Model.Room.RoomNumber;
+
+        function GetUnavailableDates()
+        {
+            var url = window.location.origin + "/RoomDetails/GetUnavailableDates";
+            $.get
+            (
+                url, { roomNumber: ultraNumber }, function (data)
+                {
+                    var something = data.map
+                        (date => function () {
+                            let jsDate = new Date(date);
+                            let returnDate = (jsDate.getDate()) + '-' + (jsDate.getMonth()) + '-' + (jsDate.getFullYear());
+                            console.log(returnDate);
+                            return returnDate;
+                        }
+                        );
+                    //console.log(something);
+                }
+            )
+        }
+
+        //var array = ['2020-12-09', '2020-12-10']
+
+        $('#datetimepicker').datetimepicker({
+            disabledDates: GetUnavailableDates(),
+            format: 'Y-m-d H:i'
         });
 
         var runOnce = false;
@@ -128,17 +144,16 @@
             }
         });
 
-        function doStuff(date) {
-            var string = $("#startdate").datetimepicker.formatDate("dd-mm-yyyyThh:mm", date)
-                return [dates.indexOf(string) == -1];
-        }
-
-        function GetUnavailableDates() {
-            var url = window.location.origin + "/RoomDetails/GetUnavailableDates";
-            $.get(url, { roomNumber: ultraNumber }, function (data) {
-                return data;
-            });
-        }
     </script>
+
+    @*<script src="~/js/jquery-ui-timepicker-addon.js"></script>
+        <link href="~/css/jquery-ui-timepicker-addon.css" rel="stylesheet" />*@
+
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>*@
+
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">*@
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">*@
     <script type="text/javascript" src="~/js/Dates.js"></script>
 }
