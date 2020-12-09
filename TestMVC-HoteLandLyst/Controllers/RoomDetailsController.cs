@@ -99,9 +99,10 @@ namespace TestMVC_HoteLandLyst.Controllers
         }
 
         [HttpGet]
-        public DateTime[] GetUnavailableDates(int roomNumber = 101)
+        public DateTime[] GetUnavailableDates(int roomNumber)
         {
-            return ValidatorFactory.Instance.GetDateValidation().GetUnavailableDates(roomNumber, sqlServer);
+            DateTime[] dates = ValidatorFactory.Instance.GetDateValidation().GetUnavailableDates(roomNumber, sqlServer);
+            return dates;
         }
     }
 }

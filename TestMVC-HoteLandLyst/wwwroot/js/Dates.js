@@ -3,8 +3,6 @@
     return l > 0 ? new Array(l).join(c || '0') + this : this;
 }//to add zero to less than 10,
 
-GetUnavailableDates();
-
 var d = new Date(),
     localDateTime = [(d.getMonth() + 1).AddZero(),
     d.getDate().AddZero(),
@@ -41,25 +39,5 @@ function ValidatePrice() {
 
 };
 
-function CheckDate() {
-    document.getElementById("EndDate").onchange = function () {
-        let startDate = document.getElementById("StartDate").value;
-        let endDate = document.getElementById("EndDate").value;
-
-        if ((Date.parse(endDate) <= Date.parse(startDate))) {
-            alert("End date should be greater than Start date");
-            document.getElementById("EndDate").value = "";
-        }
-    };
-};
 
 
-    function GetUnavailableDates() {
-        var url = window.location.origin + "/RoomDetails/GetUnavailableDates";
-        //var number = $('#roomNumber').val();
-        var number = 101;
-        var dates;
-        $.get(url, { roomNumber: number }, function (data) {
-            dates = data;
-        });
-    }
