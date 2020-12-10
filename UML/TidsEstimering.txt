@@ -1,0 +1,8 @@
+TidsEstimering : Hotel Landlyst
+
+				forventet	aktuelt
+Foranalyse 		2 dage 		1 dag
+diagrammer		2 dage		4
+Database opsæt	4 dage      3
+website style	7 dage      2
+website kode	14 dage     12
