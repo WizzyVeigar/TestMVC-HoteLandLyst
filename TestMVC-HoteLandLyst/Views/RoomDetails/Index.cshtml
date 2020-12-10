@@ -99,32 +99,68 @@
     <script>
 
         var ultraNumber = @Model.Room.RoomNumber;
+        var dataArray = new Array();
 
         function GetUnavailableDates()
         {
             var url = window.location.origin + "/RoomDetails/GetUnavailableDates";
-            $.get
+            dates = $.get
             (
                 url, { roomNumber: ultraNumber }, function (data)
                 {
-                    var something = data.map
-                        (date => function () {
-                            let jsDate = new Date(date);
-                            let returnDate = (jsDate.getDate()) + '-' + (jsDate.getMonth()) + '-' + (jsDate.getFullYear());
-                            console.log(returnDate);
-                            return returnDate;
-                        }
-                        );
-                    //console.log(something);
+                    for (var i = 0; i < data.length; i++) {
+
+                        var d = new Date(data[i]);
+                        var month = '' + (d.getMonth() + 1);
+                        var day = '' + d.getDate();
+                        var year = '' + d.getFullYear();
+
+                        if (month.length < 2)
+                            month = '0' + month;
+                        if (day.length < 2)
+                            day = '0' + day;
+
+                        
+                        dataArray.push([year, month, day].join('-').toString());
+                    }
                 }
             )
         }
+        GetUnavailableDates();
 
-        //var array = ['2020-12-09', '2020-12-10']
+
+        var testarr = new Array('2020-12-29', '2020-12-30', '2020-12-31');
+
+        console.log(Array.isArray(dataArray));
+        console.log(Array.isArray(testarr));
+
+        console.log(typeof dataArray);
+        console.log(typeof testarr);
+
+        console.log(dataArray);
+        console.log(testarr);
+
+
+        if (dataArray.constructor === Array && testarr.constructor === Array) {
+            console.log("Both are arrays");
+        }
+
+        console.log("data Array");
+        console.log(dataArray.length);
+        
+        for (var j = 0; j < dataArray.length; j++) {
+            console.log(dataArray[j].value);
+        }
+
+        console.log("Test Array");
+        console.log(testarr.length);
+        for (var i = 0; i < testarr.length; i++) {
+            console.log(testarr[i]);
+        }
 
         $('#datetimepicker').datetimepicker({
-            disabledDates: GetUnavailableDates(),
-            format: 'Y-m-d H:i'
+            disabledDates: dataArray,
+            formatDate: 'Y-m-d'
         });
 
         var runOnce = false;
@@ -145,6 +181,7 @@
         });
 
     </script>
+    <script type="text/javascript" src="~/js/Dates.js"></script>
 
     @*<script src="~/js/jquery-ui-timepicker-addon.js"></script>
         <link href="~/css/jquery-ui-timepicker-addon.css" rel="stylesheet" />*@
@@ -155,5 +192,4 @@
     @*<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">*@
     @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">*@
-    <script type="text/javascript" src="~/js/Dates.js"></script>
 }
