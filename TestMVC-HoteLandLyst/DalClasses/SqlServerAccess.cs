@@ -26,7 +26,7 @@ namespace TestMVC_HoteLandLyst.DalClasses
 
         public SqlServerAccess(IConfiguration configuration)
         {
-            connectionString = configuration.GetConnectionString("Default");
+            connectionString = configuration.GetConnectionString("Home");
         }
 
 

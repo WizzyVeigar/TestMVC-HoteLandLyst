@@ -33,7 +33,8 @@ namespace TestMVC_HoteLandLyst
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
             });
 
-            services.AddScoped<ISqlServerAccess, SqlServerAccess>();
+            services.AddScoped<ISqlServerAccess, ReservationAccess>();
+            services.AddScoped<ICustomerAccess, CustomerAccess>();
             services.AddScoped<ICreateMultiple<Room>, RoomFactory>();
             
         }

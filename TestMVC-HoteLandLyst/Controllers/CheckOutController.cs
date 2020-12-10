@@ -19,11 +19,13 @@ namespace TestMVC_HoteLandLyst.Controllers
     {
         FullReservationModel fullReservation;
 
-        private ISqlServerAccess DataAccess { get; set; }
+        private ISqlServerAccess reservationAccess { get; set; }
+        private ICustomerAccess customerAccess { get; set; }
 
-        public CheckOutController(ISqlServerAccess dataAccess)
+        public CheckOutController(ISqlServerAccess dataAccess, ICustomerAccess customerAccess)
         {
-            DataAccess = dataAccess;
+            this.reservationAccess = dataAccess;
+            this.customerAccess = customerAccess;
         }
 
         public IActionResult Index()
@@ -49,11 +51,11 @@ namespace TestMVC_HoteLandLyst.Controllers
                 throw new ArgumentNullException();
             }
             fullReservation.Customer = customerValues;
-            if (!((CustomerAccess)DataAccess).FindCustomer(fullReservation.Customer.PhoneNumber))
+            if (!((CustomerAccess)customerAccess).FindCustomer(fullReservation.Customer.PhoneNumber))
             {
-                ((CustomerAccess)DataAccess).CreateCustomer(fullReservation.Customer);
+                ((CustomerAccess)customerAccess).CreateCustomer(fullReservation.Customer);
             }
-            ((ReservationAccess)DataAccess).CreateReservation(fullReservation);
+            ((ReservationAccess)reservationAccess).CreateReservation(fullReservation);
 
             SendConfirmationEmail(customerValues.Email);
 
@@ -65,7 +67,6 @@ namespace TestMVC_HoteLandLyst.Controllers
             return BookingModelFactory.Instance.GetSessionReservations(HttpContext.Session);
         }
 
-        //Make elsewhere
         /// <summary>
         /// Send conformation email to customer <paramref name="email"/>
         /// </summary>
