@@ -55,9 +55,26 @@ namespace TestMVC_HoteLandLyst.Controllers
             {
                 ((CustomerAccess)customerAccess).CreateCustomer(fullReservation.Customer);
             }
-            ((ReservationAccess)reservationAccess).CreateReservation(fullReservation);
+            try
+            {
+                ((ReservationAccess)reservationAccess).CreateReservation(fullReservation);
 
-            SendConfirmationEmail(customerValues.Email);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+            try
+            {
+                SendConfirmationEmail(customerValues.Email);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
 
             return RedirectToAction("Index", "Rooms");
         }

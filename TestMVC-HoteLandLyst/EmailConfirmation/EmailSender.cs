@@ -51,7 +51,9 @@ namespace TestMVC_HoteLandLyst.EmailConfirmation
             From = from;
         }
 
-
+        /// <summary>
+        /// Send an Email
+        /// </summary>
         public void SendEmail()
         {
             try
@@ -61,8 +63,10 @@ namespace TestMVC_HoteLandLyst.EmailConfirmation
                 smtp.Host = "smtp.live.com";
                 smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("HotelLandlyst", "password"); //Is this okay?
+                //Email not setup to send an actual email
+                smtp.Credentials = new NetworkCredential("HotelLandlyst", "password");
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                //Outcomment and edit network credentials for sending the mail
                 smtp.Send(message);
             }
             catch (Exception e)
