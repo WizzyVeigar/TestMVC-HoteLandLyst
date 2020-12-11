@@ -17,9 +17,10 @@
         <div class="form-row">
             <div class="col">
                 <label asp-for="StartDate" class="control-label"></label>
-                <div class='input-group date' id='startdate'>
+                <div class='input-group date' id='startdate' >
                     @*<input asp-for="StartDate" type="text" class="form-control" value="@DateTime.Now.ToString("dd-mm-yyyyThh:mm")" required />*@
-                    <input id="datetimepicker" type="text" />
+                    <input id="datetimepickerstart" type="text" class="form-control" asp-for="StartDate" value="@DateTime.Now.ToString("dd-mm-yyyy hh:mm")" required/>
+
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -31,7 +32,8 @@
             <div class="col">
                 <label asp-for="EndDate" class="control-label"></label>
                 <div class='input-group date' id='enddate'>
-                    <input asp-for="EndDate" type="text" class="form-control" value="@DateTime.Now.AddMinutes(3).ToString("dd-mm-yyyyThh:mm")" required />
+                    @*<input asp-for="EndDate" type="text" class="form-control" " required />*@
+                    <input id="datetimepickerend" type="text" class="form-control" asp-for="EndDate"  value="@DateTime.Now.AddMinutes(3).ToString("dd-mm-yyyy hh:mm")" required/>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -123,8 +125,13 @@
 
                         strArra.push([year, month, day].join('-').toString());
                     }
-                    $('#datetimepicker').datetimepicker({
+                    $('#datetimepickerstart').datetimepicker({
                         disabledDates: strArra,
+                        formatDate: 'Y-m-d'
+                    });
+                    $('#datetimepickerend').datetimepicker({
+                        disabledDates: strArra,
+                        onChangeDateTime: logic,
                         formatDate: 'Y-m-d'
                     });
                 }
@@ -134,21 +141,20 @@
         GetUnavailableDates();
 
         var runOnce = false;
-        $("#enddate").on("dp.change", function () {
+        var logic = function CheckGreaterEndDate(endDateTime) {
 
-            let startDate = document.getElementById("StartDate").value;
-            let endDate = document.getElementById("EndDate").value;
+            let startDate = document.getElementById("datetimepickerstart").value;
 
-            if ((Date.parse(endDate) <= Date.parse(startDate)) && runOnce === true) {
+            if ((Date.parse(endDateTime) <= Date.parse(startDate)) && runOnce === true) {
                 alert("End date should be greater than Start date");
-                document.getElementById("EndDate").value = "";
+                $('#datetimepickerend').datetimepicker('reset');
             }
 
             //Check so the method doesn't alert on load
             if (runOnce === false) {
                 runOnce = true;
             }
-        });
+        };
 
     </script>
     <script type="text/javascript" src="~/js/Dates.js"></script>
@@ -159,7 +165,7 @@
     @*<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>*@
 
-    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">*@
 }

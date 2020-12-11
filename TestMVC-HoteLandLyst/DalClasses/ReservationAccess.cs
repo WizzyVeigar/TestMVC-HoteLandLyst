@@ -72,6 +72,6 @@ namespace TestMVC_HoteLandLyst.DalClasses
             {
                 throw e;
             }
-        }       
+        }
     }
 }

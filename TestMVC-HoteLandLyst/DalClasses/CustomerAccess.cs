@@ -6,10 +6,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using TestMVC_HoteLandLyst.Models;
+using TestMVC_HoteLandLyst.Interfaces;
 
 namespace TestMVC_HoteLandLyst.DalClasses
 {
-    public class CustomerAccess : SqlServerAccess
+    public class CustomerAccess : SqlServerAccess, ICustomerAccess
     {
         public CustomerAccess(IConfiguration configuration) : base(configuration)
         {
@@ -165,6 +166,6 @@ namespace TestMVC_HoteLandLyst.DalClasses
             }
         }
 
-        
+
     }
 }
